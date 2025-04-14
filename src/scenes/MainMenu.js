@@ -7,127 +7,100 @@ export class MainMenu extends Scene {
   }
 
   create() {
-    // Set ocean-like background
-    this.cameras.main.setBackgroundColor(0x0077be);
+    // Colors (matching grayscale look)
+    const bgColor = 0xf6f8f9;
+    const boxColor = 0xffffff;
+    const borderColor = 0x8c969d;
+    const waveColor = 0xbfc5ca;
+    const waveDarkColor = 0x8c969d;
+    const treeColor = 0xbfc5ca;
+    const textColor = "#4a545d";
 
-    // Create animated water background
-    this.waveGraphics = this.add.graphics();
+    // Set background
+    this.cameras.main.setBackgroundColor(bgColor);
 
-    // Game title
-    this.add
-      .text(512, 180, "Tides of Time", {
-        fontFamily: "Arial Black",
-        fontSize: 64,
-        color: "#ffffff",
-        stroke: "#000000",
-        strokeThickness: 8,
-        align: "center",
-      })
-      .setOrigin(0.5);
+    // Draw main bordered box
+    const boxX = 80, boxY = 30, boxW = 640, boxH = 520, boxR = 24;
+    const box = this.add.graphics();
+    box.lineStyle(6, borderColor, 1);
+    box.fillStyle(boxColor, 1);
+    box.strokeRoundedRect(boxX, boxY, boxW, boxH, boxR);
+    box.fillRoundedRect(boxX, boxY, boxW, boxH, boxR);
 
-    // Subtitle
-    this.add
-      .text(512, 250, "A Meditative Wave Balancer", {
-        fontFamily: "Arial",
-        fontSize: 28,
-        color: "#ffffff",
-        stroke: "#000000",
-        strokeThickness: 4,
-        align: "center",
-      })
-      .setOrigin(0.5);
+    // Draw horizon (land/sea split)
+    const horizonY = boxY + 220;
+    const horizon = this.add.graphics();
+    horizon.lineStyle(2, waveColor, 1);
+    horizon.strokeLineShape(new Phaser.Geom.Line(boxX, horizonY, boxX + boxW, horizonY));
 
-    // Game description
-    const description = [
-      "Balance the tides between land and sea.",
-      "Let the tide rise too high and land life suffers.",
-      "Let it fall too low and ocean life dries out.",
-      "Find harmony between the two worlds.",
-      "Balance is not achieved through force, but is revealed in stillness, when the self flows with the Way, and duality dissolves into one.",
-    ];
+    // Draw trees (simple triangles + rectangles)
+    // Tree 1 (left)
+    this.add.rectangle(boxX + 110, horizonY - 40, 16, 38, treeColor).setOrigin(0.5, 0);
+    this.add.triangle(boxX + 110, horizonY - 40, 0, 40, 16, 0, 32, 40, treeColor).setOrigin(0.5, 1);
+    // Tree 2 (center, taller)
+    this.add.rectangle(boxX + 180, horizonY - 60, 16, 56, treeColor).setOrigin(0.5, 0);
+    this.add.triangle(boxX + 180, horizonY - 60, 0, 56, 16, 0, 32, 56, treeColor).setOrigin(0.5, 1);
+    // Tree 3 (right, small)
+    this.add.rectangle(boxX + 230, horizonY - 32, 10, 28, treeColor).setOrigin(0.5, 0);
+    this.add.triangle(boxX + 230, horizonY - 32, 0, 28, 10, 0, 20, 28, treeColor).setOrigin(0.5, 1);
 
-    // Add description text
-    this.add
-      .text(512, 340, description, {
-        fontFamily: "Arial",
-        fontSize: 20,
-        color: "#ffffff",
-        stroke: "#000000",
-        strokeThickness: 3,
-        align: "center",
-        lineSpacing: 10,
-      })
-      .setOrigin(0.5);
+    // Draw two sine waves for water (use graphics)
+    const waveGraphics = this.add.graphics();
+    // Top wave
+    waveGraphics.lineStyle(4, waveColor, 1);
+    waveGraphics.beginPath();
+    for (let x = 0; x <= boxW; x += 2) {
+      let y = horizonY + 32 + Math.sin((x / boxW) * Math.PI * 2) * 18;
+      if (x === 0) waveGraphics.moveTo(boxX + x, y);
+      else waveGraphics.lineTo(boxX + x, y);
+    }
+    waveGraphics.strokePath();
+    // Bottom wave
+    waveGraphics.lineStyle(6, waveDarkColor, 1);
+    waveGraphics.beginPath();
+    for (let x = 0; x <= boxW; x += 2) {
+      let y = horizonY + 80 + Math.sin((x / boxW) * Math.PI * 2 + Math.PI / 2) * 22;
+      if (x === 0) waveGraphics.moveTo(boxX + x, y);
+      else waveGraphics.lineTo(boxX + x, y);
+    }
+    waveGraphics.strokePath();
 
-    // Instructions
-    this.add
-      .text(512, 450, "Drag left/right to control the waves", {
-        fontFamily: "Arial",
-        fontSize: 24,
-        color: "#ffffff",
-        stroke: "#000000",
-        strokeThickness: 4,
-        align: "center",
-      })
-      .setOrigin(0.5);
+    // Title text
+    this.add.text(boxX + boxW / 2, boxY + 90, "TIDE & TIME", {
+      fontFamily: "Arial Black",
+      fontSize: 64,
+      color: textColor,
+      align: "center",
+    }).setOrigin(0.5);
 
-    // Create play button
-    const playButton = this.add.rectangle(512, 550, 200, 60, 0x4a6fa5, 0.8);
-    playButton.setInteractive({ useHandCursor: true });
+    // BALANCE label (rounded border)
+    const balW = 150, balH = 48, balX = boxX + boxW - balW - 24, balY = boxY + 24;
+    const balLabel = this.add.graphics();
+    balLabel.lineStyle(5, borderColor, 1);
+    balLabel.strokeRoundedRect(balX, balY, balW, balH, 16);
+    this.add.text(balX + balW / 2, balY + balH / 2, "BALANCE", {
+      fontFamily: "Arial Black",
+      fontSize: 30,
+      color: textColor,
+      align: "center",
+    }).setOrigin(0.5);
 
-    const playText = this.add
-      .text(512, 550, "Play Game", {
-        fontFamily: "Arial",
-        fontSize: 28,
-        color: "#ffffff",
-      })
-      .setOrigin(0.5);
-
-    // Button hover effects
-    playButton.on("pointerover", () => {
-      playButton.fillColor = 0x6c8cbf;
-    });
-
-    playButton.on("pointerout", () => {
-      playButton.fillColor = 0x4a6fa5;
-    });
-
-    // Start game on button click
-    playButton.on("pointerdown", () => {
+    // PLAY button (large rounded border rectangle)
+    const playW = 340, playH = 80, playX = boxX + boxW / 2 - playW / 2, playY = boxY + boxH + 40;
+    const playBtn = this.add.graphics();
+    playBtn.lineStyle(8, borderColor, 1);
+    playBtn.strokeRoundedRect(playX, playY, playW, playH, 22);
+    // Play text
+    const playText = this.add.text(playX + playW / 2, playY + playH / 2, "PLAY", {
+      fontFamily: "Arial Black",
+      fontSize: 46,
+      color: textColor,
+      align: "center",
+    }).setOrigin(0.5);
+    // Make button interactive
+    const playZone = this.add.zone(playX, playY, playW, playH).setOrigin(0, 0).setInteractive({ useHandCursor: true });
+    playZone.on("pointerdown", () => {
       this.scene.start("Game");
     });
-
-    // Create animated wave effect
-    this.time.addEvent({
-      delay: 50,
-      callback: this.updateWaves,
-      callbackScope: this,
-      loop: true,
-    });
-  }
-
-  updateWaves() {
-    this.waveTime += 0.05;
-
-    // Clear previous drawing
-    this.waveGraphics.clear();
-
-    // Draw animated waves at the bottom
-    this.waveGraphics.fillStyle(0x0099cc, 0.6);
-    this.waveGraphics.beginPath();
-
-    // Start at bottom left
-    this.waveGraphics.moveTo(0, 768);
-
-    // Draw wavy top edge
-    for (let x = 0; x < 1024; x += 10) {
-      const y = 600 + Math.sin(x * 0.01 + this.waveTime) * 20;
-      this.waveGraphics.lineTo(x, y);
-    }
-
-    // Complete the shape
-    this.waveGraphics.lineTo(1024, 768);
-    this.waveGraphics.closePath();
-    this.waveGraphics.fill();
   }
 }
