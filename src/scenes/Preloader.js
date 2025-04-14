@@ -32,21 +32,18 @@ export class Preloader extends Scene
         // Load the assets for the game (open source placeholders)
         this.load.setPath('assets');
 
-        // Backgrounds
-        this.load.image('bg_bevouliin', 'background_bevouliin.png');
-
-        // Trees and bushes
-        this.load.image('tree1', 'tree1.png');
-        this.load.image('tree2', 'tree2.png');
-        this.load.image('bush', 'bush.png');
-
-        // Waves
-        this.load.image('wave1', 'wave1.png');
-        this.load.image('wave2', 'wave2.png');
-
-        // Fish
-        this.load.image('fish1', 'fish1.png');
-        this.load.image('fish2', 'fish2.png');
+        // Kenney backgrounds (PNG/Flat)
+        this.load.image('sky', 'PNG/Flat/sky.png');
+        this.load.image('hills1', 'PNG/Flat/hills1.png');
+        this.load.image('hills2', 'PNG/Flat/hills2.png');
+        this.load.image('grass1', 'PNG/Flat/grass1.png');
+        this.load.image('grass2', 'PNG/Flat/grass2.png');
+        this.load.image('tree01', 'PNG/Flat/tree01.png');
+        this.load.image('tree02', 'PNG/Flat/tree02.png');
+        this.load.image('tree03', 'PNG/Flat/tree03.png');
+        this.load.image('cloud1', 'PNG/Flat/cloud1.png');
+        this.load.image('cloud2', 'PNG/Flat/cloud2.png');
+        this.load.image('cloud3', 'PNG/Flat/cloud3.png');
     }
 
     create ()

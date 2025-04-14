@@ -7,99 +7,64 @@ export class MainMenu extends Scene {
   }
 
   create() {
-    // Colors (matching grayscale look)
-    const bgColor = 0xf6f8f9;
-    const boxColor = 0xffffff;
-    const borderColor = 0x8c969d;
-    const waveColor = 0xbfc5ca;
-    const waveDarkColor = 0x8c969d;
-    const treeColor = 0xbfc5ca;
-    const textColor = "#4a545d";
+    // Use Kenney backgrounds (same as Game scene)
+    this.cameras.main.setBackgroundColor(0xdee6ea);
 
-    // Set background
-    this.cameras.main.setBackgroundColor(bgColor);
+    // Sky
+    this.sky = this.add.image(512, 384, 'sky').setOrigin(0.5).setDepth(0);
+    this.sky.displayWidth = 1024;
+    this.sky.displayHeight = 768;
 
-    // Draw main bordered box
-    const boxX = 80, boxY = 30, boxW = 640, boxH = 520, boxR = 24;
-    const box = this.add.graphics();
-    box.lineStyle(6, borderColor, 1);
-    box.fillStyle(boxColor, 1);
-    box.strokeRoundedRect(boxX, boxY, boxW, boxH, boxR);
-    box.fillRoundedRect(boxX, boxY, boxW, boxH, boxR);
+    // Hills
+    this.hills = this.add.image(512, 500, 'hills1').setOrigin(0.5, 1).setDepth(1);
+    this.hills.displayWidth = 1024;
+    this.hills.displayHeight = 300;
 
-    // Draw horizon (land/sea split)
-    const horizonY = boxY + 220;
-    const horizon = this.add.graphics();
-    horizon.lineStyle(2, waveColor, 1);
-    horizon.strokeLineShape(new Phaser.Geom.Line(boxX, horizonY, boxX + boxW, horizonY));
+    // Grass
+    this.ground = this.add.image(512, 600, 'grass1').setOrigin(0.5, 1).setDepth(2);
+    this.ground.displayWidth = 1024;
+    this.ground.displayHeight = 80;
 
-    // Draw trees (simple triangles + rectangles)
-    // Tree 1 (left)
-    this.add.rectangle(boxX + 110, horizonY - 40, 16, 38, treeColor).setOrigin(0.5, 0);
-    this.add.triangle(boxX + 110, horizonY - 40, 0, 40, 16, 0, 32, 40, treeColor).setOrigin(0.5, 1);
-    // Tree 2 (center, taller)
-    this.add.rectangle(boxX + 180, horizonY - 60, 16, 56, treeColor).setOrigin(0.5, 0);
-    this.add.triangle(boxX + 180, horizonY - 60, 0, 56, 16, 0, 32, 56, treeColor).setOrigin(0.5, 1);
-    // Tree 3 (right, small)
-    this.add.rectangle(boxX + 230, horizonY - 32, 10, 28, treeColor).setOrigin(0.5, 0);
-    this.add.triangle(boxX + 230, horizonY - 32, 0, 28, 10, 0, 20, 28, treeColor).setOrigin(0.5, 1);
+    // Place a few trees for visual interest
+    this.add.image(200, 520, 'tree01').setOrigin(0.5, 1).setDepth(3).setScale(0.8);
+    this.add.image(350, 540, 'tree02').setOrigin(0.5, 1).setDepth(3).setScale(0.7);
+    this.add.image(800, 530, 'tree03').setOrigin(0.5, 1).setDepth(3).setScale(0.9);
 
-    // Draw two sine waves for water (use graphics)
-    const waveGraphics = this.add.graphics();
-    // Top wave
-    waveGraphics.lineStyle(4, waveColor, 1);
-    waveGraphics.beginPath();
-    for (let x = 0; x <= boxW; x += 2) {
-      let y = horizonY + 32 + Math.sin((x / boxW) * Math.PI * 2) * 18;
-      if (x === 0) waveGraphics.moveTo(boxX + x, y);
-      else waveGraphics.lineTo(boxX + x, y);
-    }
-    waveGraphics.strokePath();
-    // Bottom wave
-    waveGraphics.lineStyle(6, waveDarkColor, 1);
-    waveGraphics.beginPath();
-    for (let x = 0; x <= boxW; x += 2) {
-      let y = horizonY + 80 + Math.sin((x / boxW) * Math.PI * 2 + Math.PI / 2) * 22;
-      if (x === 0) waveGraphics.moveTo(boxX + x, y);
-      else waveGraphics.lineTo(boxX + x, y);
-    }
-    waveGraphics.strokePath();
+    // Add some clouds
+    this.add.image(250, 120, 'cloud1').setOrigin(0.5).setDepth(4).setAlpha(0.9).setScale(1.1);
+    this.add.image(700, 80, 'cloud2').setOrigin(0.5).setDepth(4).setAlpha(0.85).setScale(0.95);
+    this.add.image(900, 180, 'cloud3').setOrigin(0.5).setDepth(4).setAlpha(0.8).setScale(1.2);
 
     // Title text
-    this.add.text(boxX + boxW / 2, boxY + 90, "TIDE & TIME", {
+    this.add.text(512, 140, "TIDE & TIME", {
       fontFamily: "Arial Black",
-      fontSize: 64,
-      color: textColor,
+      fontSize: 72,
+      color: "#4a545d",
+      stroke: "#ffffff",
+      strokeThickness: 8,
       align: "center",
-    }).setOrigin(0.5);
+    }).setOrigin(0.5).setDepth(10);
 
-    // BALANCE label (rounded border)
-    const balW = 150, balH = 48, balX = boxX + boxW - balW - 24, balY = boxY + 24;
-    const balLabel = this.add.graphics();
-    balLabel.lineStyle(5, borderColor, 1);
-    balLabel.strokeRoundedRect(balX, balY, balW, balH, 16);
-    this.add.text(balX + balW / 2, balY + balH / 2, "BALANCE", {
-      fontFamily: "Arial Black",
-      fontSize: 30,
-      color: textColor,
+    // Balance label
+    this.add.text(860, 60, "BALANCE", {
+      fontFamily: "Arial",
+      fontSize: 32,
+      color: "#4a545d",
+      backgroundColor: "#ffffffcc",
+      padding: { left: 16, right: 16, top: 8, bottom: 8 },
       align: "center",
-    }).setOrigin(0.5);
+    }).setOrigin(0.5).setDepth(10);
 
-    // PLAY button (large rounded border rectangle)
-    const playW = 340, playH = 80, playX = boxX + boxW / 2 - playW / 2, playY = boxY + boxH + 40;
-    const playBtn = this.add.graphics();
-    playBtn.lineStyle(8, borderColor, 1);
-    playBtn.strokeRoundedRect(playX, playY, playW, playH, 22);
-    // Play text
-    const playText = this.add.text(playX + playW / 2, playY + playH / 2, "PLAY", {
+    // Play button (simple rounded rectangle with text)
+    const playBtn = this.add.rectangle(512, 700, 320, 80, 0xffffff, 1).setStrokeStyle(6, 0x8c969d).setOrigin(0.5).setDepth(10).setInteractive();
+    this.add.text(512, 700, "PLAY", {
       fontFamily: "Arial Black",
-      fontSize: 46,
-      color: textColor,
+      fontSize: 48,
+      color: "#4a545d",
       align: "center",
-    }).setOrigin(0.5);
+    }).setOrigin(0.5).setDepth(11);
     // Make button interactive
-    const playZone = this.add.zone(playX, playY, playW, playH).setOrigin(0, 0).setInteractive({ useHandCursor: true });
-    playZone.on("pointerdown", () => {
+    playBtn.on("pointerdown", () => {
       this.scene.start("Game");
     });
   }
