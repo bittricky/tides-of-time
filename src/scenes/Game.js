@@ -18,16 +18,23 @@ export default class Game extends Phaser.Scene {
     this.gameOver = false;
 
     // --- UI: Harmony Meter ---
-    this.harmonyG = this.add.graphics();
+    this.harmonyG = this.add.graphics().setDepth(100);
+    // Draw thick border
+    this.harmonyG.lineStyle(6, 0x222f3e, 1);
+    this.harmonyG.strokeRoundedRect(40, 40, 48, 160, 16);
+    // Draw 'balanced' zone highlight
+    this.harmonyG.fillStyle(0xc7f7d3, 0.4);
+    this.harmonyG.fillRoundedRect(42, 40+160*0.33, 44, 160*0.34, 12);
+    // Draw meter ticks
     this.harmonyG.lineStyle(2, 0x444444, 1);
-    this.harmonyG.strokeRect(40, 40, 36, 120);
-    for (let i = 0; i < 5; i++) {
-        this.harmonyG.strokeRect(40, 40 + i * 24, 36, 24);
+    for (let i = 0; i < 6; i++) {
+      this.harmonyG.lineBetween(40, 40 + i * 32, 88, 40 + i * 32);
     }
-    this.harmonyTextLow = this.add.text(90, 52, 'Low', { fontFamily: 'Arial', fontSize: 24, color: '#444' });
-    this.harmonyTextBal = this.add.text(90, 100, 'Balanced', { fontFamily: 'Arial', fontSize: 24, color: '#444' });
-    this.harmonyTextHigh = this.add.text(90, 148, 'High', { fontFamily: 'Arial', fontSize: 24, color: '#444' });
-    this.harmonyMeter = this.add.graphics();
+    this.harmonyTextLow = this.add.text(98, 52, 'Low', { fontFamily: 'Arial', fontSize: 22, color: '#444' });
+    this.harmonyTextBal = this.add.text(98, 100, 'Balanced', { fontFamily: 'Arial', fontSize: 22, color: '#444' });
+    this.harmonyTextHigh = this.add.text(98, 168, 'High', { fontFamily: 'Arial', fontSize: 22, color: '#444' });
+    this.harmonyMeter = this.add.graphics().setDepth(101);
+    this.harmonyValueText = this.add.text(64, 210, '', { fontFamily: 'Arial Black', fontSize: 22, color: '#222', align: 'center' }).setOrigin(0.5).setDepth(102);
 
     // --- Harmony Meter Indicator (updates in update()) ---
     this.updateHarmonyMeter();
@@ -62,16 +69,18 @@ export default class Game extends Phaser.Scene {
     }
 
     // --- Placeholder Animals/Life ---
+    // --- Placeholder Animals/Life (with pulse animation state) ---
     this.landAnimals = [
-        this.add.ellipse(250, 290, 38, 24, 0xcccccc), // tree
-        this.add.ellipse(410, 300, 38, 24, 0xcccccc), // tree
-        this.add.ellipse(600, 280, 32, 22, 0xcccccc), // crab
+      this.add.ellipse(250, 290, 38, 24, 0xcccccc), // tree
+      this.add.ellipse(410, 300, 38, 24, 0xcccccc), // tree
+      this.add.ellipse(600, 280, 32, 22, 0xcccccc), // crab
     ];
     this.oceanLife = [
-        this.add.ellipse(200, 500, 34, 18, 0xcccccc), // fish
-        this.add.ellipse(420, 540, 24, 24, 0xcccccc), // coral
-        this.add.ellipse(800, 520, 34, 18, 0xcccccc), // fish
+      this.add.ellipse(200, 500, 34, 18, 0xcccccc), // fish
+      this.add.ellipse(420, 540, 24, 24, 0xcccccc), // coral
+      this.add.ellipse(800, 520, 34, 18, 0xcccccc), // fish
     ];
+    this.animalPulse = 0; // for pulse animation
 
     // --- Harmony Meter Title ---
     this.add.text(512, 28, 'Harmony Meter', { fontFamily: 'Arial', fontSize: 36, color: '#444' }).setOrigin(0.5);
@@ -106,14 +115,36 @@ export default class Game extends Phaser.Scene {
       this.tide += this.tideDir * 0.0025;
       this.tide = Phaser.Math.Clamp(this.tide, 0, 1);
     }
+    // Animate animal/coral pulse
+    this.animalPulse = (this.animalPulse || 0) + 0.07;
+    // Harmony state
+    const inBalanced = (this.tide >= 0.33 && this.tide <= 0.67);
     // Update harmony meter
-    this.updateHarmonyMeter();
+    this.updateHarmonyMeter(inBalanced);
     // Animals react
     for (let a of this.landAnimals) {
-      a.setFillStyle(this.tide < 0.3 ? 0xffcccc : 0xcccccc);
+      if (this.tide < 0.33) {
+        a.setFillStyle(0xffcccc, 1);
+        a.setScale(0.8 + 0.04 * Math.sin(this.animalPulse * 3));
+      } else if (this.tide > 0.67) {
+        a.setFillStyle(0xffe5b0, 1);
+        a.setScale(0.85 + 0.03 * Math.sin(this.animalPulse * 4));
+      } else {
+        a.setFillStyle(0x7cf7a7, 1);
+        a.setScale(1.05 + 0.07 * Math.sin(this.animalPulse)); // pulse
+      }
     }
     for (let o of this.oceanLife) {
-      o.setFillStyle(this.tide > 0.7 ? 0xccddff : 0xcccccc);
+      if (this.tide > 0.67) {
+        o.setFillStyle(0xccddff, 1);
+        o.setScale(0.8 + 0.04 * Math.sin(this.animalPulse * 2));
+      } else if (this.tide < 0.33) {
+        o.setFillStyle(0xe0e0e0, 1);
+        o.setScale(0.85 + 0.03 * Math.sin(this.animalPulse * 3));
+      } else {
+        o.setFillStyle(0x7cf7a7, 1);
+        o.setScale(1.05 + 0.07 * Math.sin(this.animalPulse + 1)); // pulse
+      }
     }
     // Lose if out of balance too long
     if (this.tide < 0.08 || this.tide > 0.92) {
@@ -128,10 +159,21 @@ export default class Game extends Phaser.Scene {
     }
   }
 
-  updateHarmonyMeter() {
+  updateHarmonyMeter(inBalanced) {
     this.harmonyMeter.clear();
-    let y = 40 + (1-this.tide)*120;
-    this.harmonyMeter.fillStyle(0x4dbbe6, 1);
-    this.harmonyMeter.fillRect(42, y-8, 32, 16);
+    // Glow or color change for danger
+    if (!inBalanced) {
+      this.harmonyMeter.lineStyle(8, 0xff4d4d, 0.7);
+      this.harmonyMeter.strokeRoundedRect(40, 40, 48, 160, 16);
+    }
+    // Indicator
+    let y = 40 + (1-this.tide)*160;
+    let color = inBalanced ? 0x2ecc71 : 0xff4d4d;
+    this.harmonyMeter.fillStyle(color, 1);
+    this.harmonyMeter.fillRoundedRect(46, y-12, 40, 24, 8);
+    // Numeric display
+    let harmonyPct = Math.round((1 - Math.abs(this.tide - 0.5) * 2) * 100);
+    this.harmonyValueText.setText(harmonyPct + '%');
+    this.harmonyValueText.setColor(inBalanced ? '#228b22' : '#b22222');
   }
 }
