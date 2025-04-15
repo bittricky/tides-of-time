@@ -1,9 +1,9 @@
 # Tides of Time – Development Task List
 
 ## Core Gameplay
-- [x] Implement wave balancing mechanic (drag/tap to control tide)
-- [x] Display land and ocean health, score, and balance feedback
-- [x] Game over and restart flow
+- [ ] Implement wave balancing mechanic (drag/tap to control tide)
+- [ ] Display land and ocean health, score, and balance feedback
+- [ ] Game over and restart flow
 
 ## Visuals & Effects
 - [ ] Replace placeholder graphics with custom ink-wash ocean and sand art
