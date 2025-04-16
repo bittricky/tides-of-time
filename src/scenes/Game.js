@@ -14,8 +14,8 @@ export default class Game extends Phaser.Scene {
     // --- GAME STATE ---
     // Oscillation variables
     this.oscPhase = 0;
-    this.oscSpeed = 0.015 + Math.random() * 0.01; // randomize speed a bit
-    this.oscAmp = 0.23 + Math.random() * 0.07; // randomize amplitude a bit
+    this.oscSpeed = 0.018 + Math.random() * 0.012; // slightly faster
+    this.oscAmp = 0.46 + Math.random() * 0.08; // amplitude large enough to reach ends
     this.playerForce = 0; // player-applied force
     this.tide = 0.5; // 0 = low, 1 = high, 0.5 = balanced
     this.tideDir = 0; // -1 = lowering, 1 = raising, 0 = stable
@@ -117,9 +117,10 @@ export default class Game extends Phaser.Scene {
     if (this.gameOver) return;
     // Oscillation phase update
     this.oscPhase += this.oscSpeed;
-    // Occasionally randomize speed/amplitude for unpredictability
-    if (Math.random() < 0.005) this.oscSpeed = 0.014 + Math.random() * 0.012;
-    if (Math.random() < 0.005) this.oscAmp = 0.21 + Math.random() * 0.12;
+    // Optionally, increase amplitude over time for progressive difficulty
+    if (this.oscAmp < 0.48) this.oscAmp += 0.00003; // slow ramp-up
+    // Occasionally randomize speed for unpredictability
+    if (Math.random() < 0.005) this.oscSpeed = 0.016 + Math.random() * 0.014;
     // Compute oscillation
     const osc = Math.sin(this.oscPhase) * this.oscAmp;
     // Player force
@@ -165,6 +166,12 @@ export default class Game extends Phaser.Scene {
         o.setFillStyle(0x7cf7a7, 1);
         o.setScale(1.05 + 0.07 * Math.sin(this.animalPulse + 1)); // pulse
       }
+    }
+    // Game over if meter reaches either end
+    if (this.tide <= 0 || this.tide >= 1) {
+      this.gameOver = true;
+      this.gameOverText.setText('Game Over\nTide Overwhelmed');
+      return;
     }
     // Lose if out of balance too long
     if (this.tide < 0.33 || this.tide > 0.67) {
