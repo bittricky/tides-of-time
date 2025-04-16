@@ -12,6 +12,11 @@ export default class Game extends Phaser.Scene {
 
   create() {
     // --- GAME STATE ---
+    // Oscillation variables
+    this.oscPhase = 0;
+    this.oscSpeed = 0.015 + Math.random() * 0.01; // randomize speed a bit
+    this.oscAmp = 0.23 + Math.random() * 0.07; // randomize amplitude a bit
+    this.playerForce = 0; // player-applied force
     this.tide = 0.5; // 0 = low, 1 = high, 0.5 = balanced
     this.tideDir = 0; // -1 = lowering, 1 = raising, 0 = stable
     this.tideTimer = 0; // How long tide is out of balance
@@ -110,11 +115,26 @@ export default class Game extends Phaser.Scene {
 
   update() {
     if (this.gameOver) return;
-    // Update tide
+    // Oscillation phase update
+    this.oscPhase += this.oscSpeed;
+    // Occasionally randomize speed/amplitude for unpredictability
+    if (Math.random() < 0.005) this.oscSpeed = 0.014 + Math.random() * 0.012;
+    if (Math.random() < 0.005) this.oscAmp = 0.21 + Math.random() * 0.12;
+    // Compute oscillation
+    const osc = Math.sin(this.oscPhase) * this.oscAmp;
+    // Player force
     if (this.tideDir !== 0) {
-      this.tide += this.tideDir * 0.0025;
-      this.tide = Phaser.Math.Clamp(this.tide, 0, 1);
+      this.playerForce += this.tideDir * 0.018;
+    } else {
+      // Decay player force gradually
+      this.playerForce *= 0.94;
+      if (Math.abs(this.playerForce) < 0.002) this.playerForce = 0;
     }
+    // Clamp player force
+    this.playerForce = Phaser.Math.Clamp(this.playerForce, -0.4, 0.4);
+    // The actual tide is the sum of the oscillation and player force, centered at 0.5
+    this.tide = Phaser.Math.Clamp(0.5 + osc + this.playerForce, 0, 1);
+
     // Animate animal/coral pulse
     this.animalPulse = (this.animalPulse || 0) + 0.07;
     // Harmony state
@@ -147,7 +167,7 @@ export default class Game extends Phaser.Scene {
       }
     }
     // Lose if out of balance too long
-    if (this.tide < 0.08 || this.tide > 0.92) {
+    if (this.tide < 0.33 || this.tide > 0.67) {
       this.tideTimer += 1;
       if (this.tideTimer > 180) { // ~3s
         this.gameOver = true;
