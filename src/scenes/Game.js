@@ -90,6 +90,11 @@ export default class Game extends Phaser.Scene {
     // --- Harmony Meter Title ---
     this.add.text(512, 28, 'Harmony Meter', { fontFamily: 'Arial', fontSize: 36, color: '#444' }).setOrigin(0.5);
 
+    // --- SCORE (move after meter, before controls) ---
+    this.score = 0;
+    this.scoreText = this.add.text(512, 110, 'Score: 0', { fontFamily: 'Arial Black', fontSize: 40, color: '#1d3557', align: 'center', stroke: '#fff', strokeThickness: 6 }).setOrigin(0.5).setDepth(1000);
+    this.difficultyTimer = 0; // For ramping up oscillation
+
     // --- Controls: SEND WAVE / EASE TIDE ---
     const btnW = 260, btnH = 68, btnR = 16;
     const sendBtnG = this.add.graphics();
@@ -117,10 +122,12 @@ export default class Game extends Phaser.Scene {
     if (this.gameOver) return;
     // Oscillation phase update
     this.oscPhase += this.oscSpeed;
-    // Optionally, increase amplitude over time for progressive difficulty
-    if (this.oscAmp < 0.48) this.oscAmp += 0.00003; // slow ramp-up
+    // Difficulty ramp: increase amplitude and speed over time
+    this.difficultyTimer += 1;
+    if (this.oscAmp < 0.49) this.oscAmp += 0.00005; // ramp amplitude
+    if (this.oscSpeed < 0.045) this.oscSpeed += 0.000015; // ramp speed
     // Occasionally randomize speed for unpredictability
-    if (Math.random() < 0.005) this.oscSpeed = 0.016 + Math.random() * 0.014;
+    if (Math.random() < 0.005) this.oscSpeed = 0.016 + Math.random() * 0.014 + 0.00001 * this.difficultyTimer;
     // Compute oscillation
     const osc = Math.sin(this.oscPhase) * this.oscAmp;
     // Player force
@@ -170,7 +177,7 @@ export default class Game extends Phaser.Scene {
     // Game over if meter reaches either end
     if (this.tide <= 0 || this.tide >= 1) {
       this.gameOver = true;
-      this.gameOverText.setText('Game Over\nTide Overwhelmed');
+      this.gameOverText.setText('Game Over\nTide Overwhelmed\nScore: ' + Math.round(this.score));
       return;
     }
     // Lose if out of balance too long
@@ -178,11 +185,14 @@ export default class Game extends Phaser.Scene {
       this.tideTimer += 1;
       if (this.tideTimer > 180) { // ~3s
         this.gameOver = true;
-        this.gameOverText.setText('Game Over\nOut of Balance');
+        this.gameOverText.setText('Game Over\nOut of Balance\nScore: ' + Math.round(this.score));
       }
     } else {
       this.tideTimer = 0;
       this.gameOverText.setText('');
+      // Score logic: increment smoothly while in balance
+      this.score += 1/60; // 1 point per second in balance
+      this.scoreText.setText('Score: ' + Math.round(this.score));
     }
   }
 
