@@ -168,12 +168,29 @@ export default class Game extends Phaser.Scene {
       this.tideDir = -1;
     });
 
-    // --- Drag/tap controls ---
-    this.input.on("pointerup", () => {
-      this.tideDir = 0;
+    // --- Keyboard controls ---
+    this.keys = this.input.keyboard.addKeys({
+      left: Phaser.Input.Keyboard.KeyCodes.A,
+      right: Phaser.Input.Keyboard.KeyCodes.D,
+      arrowLeft: Phaser.Input.Keyboard.KeyCodes.LEFT,
+      arrowRight: Phaser.Input.Keyboard.KeyCodes.RIGHT,
     });
-    this.input.on("pointerout", () => {
-      this.tideDir = 0;
+    this.input.keyboard.on("keydown", (event) => {
+      if (event.code === "KeyA" || event.code === "ArrowLeft") {
+        this.tideDir = -1;
+      } else if (event.code === "KeyD" || event.code === "ArrowRight") {
+        this.tideDir = 1;
+      }
+    });
+    this.input.keyboard.on("keyup", (event) => {
+      if (
+        event.code === "KeyA" ||
+        event.code === "ArrowLeft" ||
+        event.code === "KeyD" ||
+        event.code === "ArrowRight"
+      ) {
+        this.tideDir = 0;
+      }
     });
 
     // --- Game Over Text (hidden by default) ---
