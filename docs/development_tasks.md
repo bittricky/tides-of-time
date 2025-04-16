@@ -1,9 +1,12 @@
 # Tides of Time – Development Task List
 
+**Prototype Status:**
+- Core gameplay logic, tide/harmony meter, and game over state are implemented and functional with placeholder UI. Next: polish visuals, add effects, and expand gameplay depth.
+
 ## Core Gameplay
-- [ ] Implement wave balancing mechanic (drag/tap to control tide)
-- [ ] Display land and ocean health, score, and balance feedback
-- [ ] Game over and restart flow
+- [x] Implement wave balancing mechanic (drag/tap to control tide)
+- [x] Display land and ocean health, score, and balance feedback
+- [x] Game over and restart flow (prototype; restart flow to be refined)
 
 ## Visuals & Effects
 - [ ] Replace placeholder graphics with custom ink-wash ocean and sand art
