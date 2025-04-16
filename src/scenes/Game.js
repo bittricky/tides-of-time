@@ -194,7 +194,7 @@ export default class Game extends Phaser.Scene {
     this.oscPhase += this.oscSpeed;
     // Difficulty ramp: increase amplitude and speed over time
     this.difficultyTimer += 1;
-    if (this.oscAmp < 0.49) this.oscAmp += 0.00005; // ramp amplitude
+    if (this.oscAmp < 0.499) this.oscAmp += 0.00005; // ramp amplitude, cap at 0.499
     if (this.oscSpeed < 0.045) this.oscSpeed += 0.000015; // ramp speed
     // Occasionally randomize speed for unpredictability
     if (Math.random() < 0.005)
@@ -213,6 +213,7 @@ export default class Game extends Phaser.Scene {
     // Clamp player force
     this.playerForce = Phaser.Math.Clamp(this.playerForce, -0.4, 0.4);
     // The actual tide is the sum of the oscillation and player force, centered at 0.5
+    // Oscillates between nearly 0 and 1
     this.tide = Phaser.Math.Clamp(0.5 + osc + this.playerForce, 0, 1);
 
     // Animate animal/coral pulse
@@ -247,6 +248,24 @@ export default class Game extends Phaser.Scene {
       }
     }
     // Game over if meter reaches either end
+    // Danger margin at both ends
+    const inDangerMargin = this.tide < 0.08 || this.tide > 0.92;
+    if (!this.dangerTimer) this.dangerTimer = 0;
+    if (inDangerMargin) {
+      this.dangerTimer += 1;
+      if (this.dangerTimer > 120) {
+        // 2 seconds in danger margin
+        this.gameOver = true;
+        this.gameOverText.setText(
+          "Game Over:\n The tides lingered at the edge too long\nScore: " +
+            Math.round(this.score)
+        );
+        return;
+      }
+    } else {
+      this.dangerTimer = 0;
+    }
+    // Immediate game over if meter is at the absolute ends
     if (this.tide <= 0 || this.tide >= 1) {
       this.gameOver = true;
       this.gameOverText.setText(
