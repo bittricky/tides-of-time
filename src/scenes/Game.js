@@ -281,6 +281,20 @@ export default class Game extends Phaser.Scene {
   }
 
   update() {
+    // Check for true game over at the very start
+    if (this.tide <= 0 || this.tide >= 1) {
+      if (!this.gameOver) {
+        this.gameOver = true;
+        this.gameOverText.setText(
+          "Game Over:\n You've been overwhelmed by the tides \nScore: " +
+            Math.round(this.score)
+        );
+        this.retryBtnG.setVisible(true);
+        this.retryBtnText.setVisible(true);
+        this.retryBtnHit.setVisible(true);
+      }
+      return;
+    }
     if (this.gameOver) return;
     // Oscillation phase update
     this.oscPhase += this.oscSpeed;
@@ -393,9 +407,15 @@ export default class Game extends Phaser.Scene {
       this.retryBtnG.setVisible(false);
       this.retryBtnText.setVisible(false);
       this.retryBtnHit.setVisible(false);
-      // Score logic: increment smoothly while in balance
-      this.score += 1 / 60; // 1 point per second in balance
-      this.scoreText.setText("Score: " + Math.round(this.score));
+      // Score logic: increment only if player is actively controlling
+      if (this.tideDir !== 0) {
+        this.score += 1 / 60; // 1 point per second in balance
+        this.scoreText.setText("Score: " + Math.round(this.score));
+      }
+      // If not controlling, still update score display in case it was updated elsewhere
+      else {
+        this.scoreText.setText("Score: " + Math.round(this.score));
+      }
     }
   }
 
