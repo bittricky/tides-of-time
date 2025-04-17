@@ -135,10 +135,11 @@ export default class Game extends Phaser.Scene {
     const btnW = 260,
       btnH = 68,
       btnR = 16;
-    const sendBtnG = this.add.graphics();
-    sendBtnG.lineStyle(4, 0x888888, 1);
-    sendBtnG.strokeRoundedRect(180, 630, btnW, btnH, btnR);
-    this.add
+    // Store graphics for highlighting
+    this.sendBtnG = this.add.graphics();
+    this.sendBtnG.lineStyle(4, 0x888888, 1);
+    this.sendBtnG.strokeRoundedRect(180, 630, btnW, btnH, btnR);
+    this.sendBtnText = this.add
       .text(310, 665, "SEND WAVE", {
         fontFamily: "Arial Black",
         fontSize: 32,
@@ -150,11 +151,21 @@ export default class Game extends Phaser.Scene {
       .setInteractive({ useHandCursor: true });
     sendBtnHit.on("pointerdown", () => {
       this.tideDir = 1;
+      this.highlightButton('send', true);
     });
-    const easeBtnG = this.add.graphics();
-    easeBtnG.lineStyle(4, 0x888888, 1);
-    easeBtnG.strokeRoundedRect(584, 630, btnW, btnH, btnR);
-    this.add
+    sendBtnHit.on("pointerup", () => {
+      this.tideDir = 0;
+      this.highlightButton('send', false);
+    });
+    sendBtnHit.on("pointerout", () => {
+      this.tideDir = 0;
+      this.highlightButton('send', false);
+    });
+
+    this.easeBtnG = this.add.graphics();
+    this.easeBtnG.lineStyle(4, 0x888888, 1);
+    this.easeBtnG.strokeRoundedRect(584, 630, btnW, btnH, btnR);
+    this.easeBtnText = this.add
       .text(714, 665, "EASE TIDE", {
         fontFamily: "Arial Black",
         fontSize: 32,
@@ -166,7 +177,25 @@ export default class Game extends Phaser.Scene {
       .setInteractive({ useHandCursor: true });
     easeBtnHit.on("pointerdown", () => {
       this.tideDir = -1;
+      this.highlightButton('ease', true);
     });
+    easeBtnHit.on("pointerup", () => {
+      this.tideDir = 0;
+      this.highlightButton('ease', false);
+    });
+    easeBtnHit.on("pointerout", () => {
+      this.tideDir = 0;
+      this.highlightButton('ease', false);
+    });
+
+    // --- Key Mapping Description ---
+    this.keyDescText = this.add.text(512, 600, "[A] or [←] = EASE TIDE   |   [D] or [→] = SEND WAVE", {
+      fontFamily: "Arial",
+      fontSize: 22,
+      color: "#444",
+      align: "center"
+    }).setOrigin(0.5);
+
 
     // --- Keyboard controls ---
     this.keys = this.input.keyboard.addKeys({
@@ -178,20 +207,37 @@ export default class Game extends Phaser.Scene {
     this.input.keyboard.on("keydown", (event) => {
       if (event.code === "KeyA" || event.code === "ArrowLeft") {
         this.tideDir = -1;
+        this.highlightButton('ease', true);
       } else if (event.code === "KeyD" || event.code === "ArrowRight") {
         this.tideDir = 1;
+        this.highlightButton('send', true);
       }
     });
     this.input.keyboard.on("keyup", (event) => {
-      if (
-        event.code === "KeyA" ||
-        event.code === "ArrowLeft" ||
-        event.code === "KeyD" ||
-        event.code === "ArrowRight"
-      ) {
+      if (event.code === "KeyA" || event.code === "ArrowLeft") {
         this.tideDir = 0;
+        this.highlightButton('ease', false);
+      } else if (event.code === "KeyD" || event.code === "ArrowRight") {
+        this.tideDir = 0;
+        this.highlightButton('send', false);
       }
     });
+
+    // --- Helper for button highlighting ---
+    this.highlightButton = (which, on) => {
+      if (which === 'send') {
+        this.sendBtnG.clear();
+        this.sendBtnG.lineStyle(4, on ? 0x1d3557 : 0x888888, 1);
+        this.sendBtnG.strokeRoundedRect(180, 630, btnW, btnH, btnR);
+        this.sendBtnText.setColor(on ? "#1d3557" : "#444");
+      } else if (which === 'ease') {
+        this.easeBtnG.clear();
+        this.easeBtnG.lineStyle(4, on ? 0x1d3557 : 0x888888, 1);
+        this.easeBtnG.strokeRoundedRect(584, 630, btnW, btnH, btnR);
+        this.easeBtnText.setColor(on ? "#1d3557" : "#444");
+      }
+    };
+
 
     // --- Game Over Text (hidden by default) ---
     this.gameOverText = this.add
@@ -203,6 +249,35 @@ export default class Game extends Phaser.Scene {
       })
       .setOrigin(0.5)
       .setDepth(20);
+
+    // --- Retry Button (hidden by default) ---
+    this.retryBtnG = this.add.graphics().setDepth(21);
+    this.retryBtnG.lineStyle(6, 0x1d3557, 1);
+    this.retryBtnG.strokeRoundedRect(362, 470, 300, 70, 22);
+    this.retryBtnG.fillStyle(0xf7fafd, 1);
+    this.retryBtnG.fillRoundedRect(362, 470, 300, 70, 22);
+    this.retryBtnText = this.add.text(512, 505, "RETRY", {
+      fontFamily: "Arial Black",
+      fontSize: 38,
+      color: "#1d3557",
+      align: "center"
+    }).setOrigin(0.5).setDepth(22);
+    this.retryBtnHit = this.add.rectangle(512, 505, 300, 70, 0x000000, 0)
+      .setOrigin(0.5)
+      .setInteractive({ useHandCursor: true })
+      .setDepth(23);
+    this.retryBtnG.setVisible(false);
+    this.retryBtnText.setVisible(false);
+    this.retryBtnHit.setVisible(false);
+    this.retryBtnHit.on('pointerdown', () => {
+      this.scene.restart();
+    });
+    // Hide retry if restarting
+    this.events.on('shutdown', () => {
+      this.retryBtnG.setVisible(false);
+      this.retryBtnText.setVisible(false);
+      this.retryBtnHit.setVisible(false);
+    });
   }
 
   update() {
@@ -277,6 +352,9 @@ export default class Game extends Phaser.Scene {
           "Game Over:\n The tides lingered at the edge too long\nScore: " +
             Math.round(this.score)
         );
+        this.retryBtnG.setVisible(true);
+        this.retryBtnText.setVisible(true);
+        this.retryBtnHit.setVisible(true);
         return;
       }
     } else {
@@ -289,6 +367,9 @@ export default class Game extends Phaser.Scene {
         "Game Over:\n You've been overwhelmed by the tides \nScore: " +
           Math.round(this.score)
       );
+      this.retryBtnG.setVisible(true);
+      this.retryBtnText.setVisible(true);
+      this.retryBtnHit.setVisible(true);
       return;
     }
     // Lose if out of balance too long
@@ -301,10 +382,17 @@ export default class Game extends Phaser.Scene {
           "Game Over:\n You've fallen out of balance\nScore: " +
             Math.round(this.score)
         );
+        this.retryBtnG.setVisible(true);
+        this.retryBtnText.setVisible(true);
+        this.retryBtnHit.setVisible(true);
+
       }
     } else {
       this.tideTimer = 0;
       this.gameOverText.setText("");
+      this.retryBtnG.setVisible(false);
+      this.retryBtnText.setVisible(false);
+      this.retryBtnHit.setVisible(false);
       // Score logic: increment smoothly while in balance
       this.score += 1 / 60; // 1 point per second in balance
       this.scoreText.setText("Score: " + Math.round(this.score));
