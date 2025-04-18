@@ -52,7 +52,7 @@ Tides of Time invites players to experience the balance by giving the player the
 
 ### Philosophical Inspiration: 
 
-> [Daoism](https://en.wikipedia.org/wiki/Daoism), [Zen](https://en.wikipedia.org/wiki/Zen), [Advaita Vedanta](https://en.wikipedia.org/wiki/Advaita_Vedanta), and the general Art of Balance
+> [Daoism](https://en.wikipedia.org/wiki/Daoism), [Zen](https://en.wikipedia.org/wiki/Zen), [Advaita Vedanta](https://en.wikipedia.org/wiki/Advaita_Vedanta), and the general principles of [the Art of Balance](https://artincontext.org/balance-in-art/)
 
 **Effortless Action:** 
 
