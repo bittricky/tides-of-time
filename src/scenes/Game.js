@@ -22,6 +22,10 @@ export default class Game extends Phaser.Scene {
     this.tideTimer = 0; // How long tide is out of balance
     this.gameOver = false;
 
+    // --- HIGH SCORE ---
+    // Load high score from localStorage or default to 0
+    this.highScore = Number(window.localStorage.getItem("highScore")) || 0;
+
     // --- UI: Harmony Meter ---
     this.harmonyG = this.add.graphics().setDepth(100);
     // Draw thick border
@@ -107,29 +111,25 @@ export default class Game extends Phaser.Scene {
     ];
     this.animalPulse = 0; // for pulse animation
 
-    // --- Harmony Meter Title ---
-    this.add
-      .text(512, 28, "Harmony Meter", {
-        fontFamily: "Arial",
-        fontSize: 36,
-        color: "#444",
-      })
-      .setOrigin(0.5);
-
     // --- SCORE (move after meter, before controls) ---
     this.score = 0;
     this.scoreText = this.add
-      .text(512, 110, "Score: 0", {
+      .text(512, 40, "Score: 0", {
         fontFamily: "Arial Black",
-        fontSize: 40,
-        color: "#1d3557",
+        fontSize: 32,
+        color: "#222",
         align: "center",
-        stroke: "#fff",
-        strokeThickness: 6,
       })
-      .setOrigin(0.5)
-      .setDepth(1000);
-    this.difficultyTimer = 0; // For ramping up oscillation
+      .setOrigin(0.5);
+
+    this.highScoreText = this.add
+      .text(512, 75, `High Score: ${this.highScore}`, {
+        fontFamily: "Arial Black",
+        fontSize: 24,
+        color: "#b8860b",
+        align: "center",
+      })
+      .setOrigin(0.5);
 
     // --- Controls: SEND WAVE / EASE TIDE ---
     const btnW = 260,
@@ -289,10 +289,13 @@ export default class Game extends Phaser.Scene {
     if (this.tide <= 0 || this.tide >= 1) {
       if (!this.gameOver) {
         this.gameOver = true;
-        this.gameOverText.setText(
+        // Show high score on game over
+        let msg =
           "Game Over:\n You've been overwhelmed by the tides \nScore: " +
-            Math.round(this.score)
-        );
+          Math.round(this.score) +
+          "\nHigh Score: " +
+          Math.round(this.highScore);
+        this.gameOverText.setText(msg);
         this.retryBtnG.setVisible(true);
         this.retryBtnText.setVisible(true);
         this.retryBtnHit.setVisible(true);
@@ -366,10 +369,13 @@ export default class Game extends Phaser.Scene {
       if (this.dangerTimer > 120) {
         // 2 seconds in danger margin
         this.gameOver = true;
-        this.gameOverText.setText(
+        // Show high score on game over
+        let msg =
           "Game Over:\n The tides lingered at the edge too long\nScore: " +
-            Math.round(this.score)
-        );
+          Math.round(this.score) +
+          "\nHigh Score: " +
+          Math.round(this.highScore);
+        this.gameOverText.setText(msg);
         this.retryBtnG.setVisible(true);
         this.retryBtnText.setVisible(true);
         this.retryBtnHit.setVisible(true);
@@ -396,10 +402,13 @@ export default class Game extends Phaser.Scene {
       if (this.tideTimer > 180) {
         // ~3s
         this.gameOver = true;
-        this.gameOverText.setText(
+        // Show high score on game over
+        let msg =
           "Game Over:\n You've fallen out of balance\nScore: " +
-            Math.round(this.score)
-        );
+          Math.round(this.score) +
+          "\nHigh Score: " +
+          Math.round(this.highScore);
+        this.gameOverText.setText(msg);
         this.retryBtnG.setVisible(true);
         this.retryBtnText.setVisible(true);
         this.retryBtnHit.setVisible(true);
