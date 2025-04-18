@@ -52,19 +52,19 @@ Tides of Time invites players to experience the balance by giving the player the
 
 ### Philosophical Inspiration: 
 
-> Daoism, Zen, Advaita Vedanta, and the general Art of Balance
+> [Daoism](https://en.wikipedia.org/wiki/Daoism), [Zen](https://en.wikipedia.org/wiki/Zen), [Advaita Vedanta](https://en.wikipedia.org/wiki/Advaita_Vedanta), and the general Art of Balance
 
 **Effortless Action:** 
 
-The game is an invitation to get into a state of flow. Without excessive thought or analysis, the player gently guides the flow, responding to what is happening in the moment. The most skillful play emerges from attentive, non-coercive presence.
+The game is an invitation to get into a [state of flow](https://en.wikipedia.org/wiki/Wu_wei). Without excessive thought or analysis, the player gently guides the flow, responding to what is happening in the moment. The most skillful play emerges from attentive, non-coercive presence.
 
 **Cyclical Interdependence:** 
 
-The oscillation of land and sea, the dance of danger and safety, reflect the ever-changing, cyclical nature of existence. Each action creates ripples; each moment of balance is both an end and a new beginning. Dualities are not opposites to be conquered, but partners in a dynamic, living whole. An Ecology.
+The oscillation of land and sea, the dance of danger and safety, reflect the ever-changing, cyclical nature of existence. Each action creates ripples; each moment of balance is both an end and a new beginning. Dualities are not opposites to be conquered, but partners in a dynamic, living whole. An [Ecology](https://en.wikipedia.org/wiki/Ecology).
 
 **Non-Dual Awareness:** 
 
-Drawing from Zen and Advaita Vedanta, the game dissolves the boundary between player and system. There is no "winning" against the tide—only the opportunity to participate in its unfolding. The experience can be meditative, welcoming change, accepting impermanence, and finding delight in the subtle interplay of cause and effect.
+Drawing from [Zen](https://en.wikipedia.org/wiki/Zen) and [Advaita Vedanta](https://en.wikipedia.org/wiki/Advaita_Vedanta), the game dissolves the boundary between player and system. There is no "winning" against the tide—only the opportunity to participate in its unfolding. The experience can be meditative, welcoming change, accepting impermanence, and finding delight in the subtle interplay of cause and effect.
 
 ---
 
