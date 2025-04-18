@@ -300,15 +300,52 @@ export default class Game extends Phaser.Scene {
 
   update() {
     // DEBUG: overlay update
+    // Defensive: check for invalid state
+    let warningMsg = '';
+    // Strict guards: immediately reset and warn if invalid
+    if (typeof this.tide !== 'number' || isNaN(this.tide)) {
+      warningMsg += 'tide INVALID\n';
+      console.warn('[CRITICAL] tide was invalid, resetting to 0.5');
+      this.tide = 0.5;
+    }
+    if (typeof this.tideDir !== 'number' || isNaN(this.tideDir)) {
+      warningMsg += 'tideDir INVALID\n';
+      console.warn('[CRITICAL] tideDir was invalid, resetting to 0');
+      this.tideDir = 0;
+    }
+    if (typeof this.dangerTimer !== 'number' || isNaN(this.dangerTimer)) {
+      warningMsg += 'dangerTimer INVALID\n';
+      console.warn('[CRITICAL] dangerTimer was invalid, resetting to 0');
+      this.dangerTimer = 0;
+    }
+    if (typeof this.score !== 'number' || isNaN(this.score)) {
+      warningMsg += 'score INVALID\n';
+      console.warn('[CRITICAL] score was invalid, resetting to 0');
+      this.score = 0;
+    }
+    if (typeof this.highScore !== 'number' || isNaN(this.highScore)) {
+      warningMsg += 'highScore INVALID\n';
+      console.warn('[CRITICAL] highScore was invalid, resetting to 0');
+      this.highScore = 0;
+    }
+    // Failsafe: if any variable was invalid, log a warning but DO NOT force game over
+    if (warningMsg) {
+      console.warn('[WARNING] Invalid state detected, but not forcing game over:', warningMsg);
+      // Optionally, you can display a warning overlay or highlight, but do not set gameOver here
+    }
     if (this.debugText) {
       this.debugText.setText(
         `gameOver: ${this.gameOver}\n` +
-          `tide: ${this.tide}\n` +
-          `tideDir: ${this.tideDir}\n` +
-          `score: ${this.score}\n` +
-          `highScore: ${this.highScore}\n` +
-          `dangerTimer: ${this.dangerTimer}`
+        `tide: ${this.tide}\n` +
+        `tideDir: ${this.tideDir}\n` +
+        `score: ${this.score}\n` +
+        `highScore: ${this.highScore}\n` +
+        `dangerTimer: ${this.dangerTimer}` +
+        (warningMsg ? '\n[WARNING]\n' + warningMsg : '')
       );
+    }
+    if (warningMsg) {
+      console.warn('[WARNING] Invalid game state detected:', warningMsg);
     }
     // Check for true game over at the very start
     if (this.tide <= 0 || this.tide >= 1) {
@@ -342,7 +379,11 @@ export default class Game extends Phaser.Scene {
       this.oscSpeed =
         0.016 + Math.random() * 0.014 + 0.00001 * this.difficultyTimer;
     // Compute oscillation
-    const osc = Math.sin(this.oscPhase) * this.oscAmp;
+    let osc = Math.sin(this.oscPhase) * this.oscAmp;
+    if (typeof osc !== 'number' || isNaN(osc)) {
+      console.warn('[CRITICAL] osc was invalid, resetting to 0');
+      osc = 0;
+    }
     // Player force
     if (this.tideDir !== 0) {
       this.playerForce += this.tideDir * 0.018;
@@ -352,10 +393,24 @@ export default class Game extends Phaser.Scene {
       if (Math.abs(this.playerForce) < 0.002) this.playerForce = 0;
     }
     // Clamp player force
+    if (typeof this.playerForce !== 'number' || isNaN(this.playerForce)) {
+      console.warn('[CRITICAL] playerForce was invalid, resetting to 0');
+      this.playerForce = 0;
+    }
     this.playerForce = Phaser.Math.Clamp(this.playerForce, -0.4, 0.4);
     // The actual tide is the sum of the oscillation and player force, centered at 0.5
     // Oscillates between nearly 0 and 1
-    this.tide = Phaser.Math.Clamp(0.5 + osc + this.playerForce, 0, 1);
+    let computedTide = 0.5 + osc + this.playerForce;
+    if (typeof computedTide !== 'number' || isNaN(computedTide)) {
+      console.warn('[CRITICAL] computedTide was invalid, resetting to 0.5');
+      computedTide = 0.5;
+    }
+    this.tide = Phaser.Math.Clamp(computedTide, 0, 1);
+
+    // --- DETAILED LOGGING ---
+    if (!this.gameOver) {
+      console.log(`[FRAME] tide=${this.tide} tideDir=${this.tideDir} dangerTimer=${this.dangerTimer} score=${this.score}`);
+    }
 
     // Animate animal/coral pulse
     this.animalPulse = (this.animalPulse || 0) + 0.07;
@@ -462,9 +517,7 @@ export default class Game extends Phaser.Scene {
       if (this.tideDir !== 0) {
         this.score += 1 / 60; // 1 point per second in balance
         this.scoreText.setText("Score: " + Math.round(this.score));
-      }
-      // If not controlling, still update score display in case it was updated elsewhere
-      else {
+      } else {
         this.scoreText.setText("Score: " + Math.round(this.score));
       }
     }
