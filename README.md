@@ -50,7 +50,9 @@ Tides of Time invites players to experience the balance by giving the player the
 - `public/` — Static assets (images, audio, etc.)
 - `index.html` — Main HTML entry point
 
-## Philosophy: Daoism, Zen, Advaita Vedanta, and the Art of Balance
+### Philosophical Inspiration: 
+
+> Daoism, Zen, Advaita Vedanta, and the general Art of Balance
 
 - **Effortless Action:** The game is an invitation to get into a state of flow. Without excessive thought or analysis, the player gently guides the flow, responding to what is happening in the moment. The most skillful play emerges from attentive, non-coercive presence.
 - **Cyclical Interdependence:** The oscillation of land and sea, the dance of danger and safety, reflect the ever-changing, cyclical nature of existence. Each action creates ripples; each moment of balance is both an end and a beginning. Dualities are not opposites to be conquered, but partners in a dynamic, living whole.
