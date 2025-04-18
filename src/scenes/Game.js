@@ -151,15 +151,15 @@ export default class Game extends Phaser.Scene {
       .setInteractive({ useHandCursor: true });
     sendBtnHit.on("pointerdown", () => {
       this.tideDir = 1;
-      this.highlightButton('send', true);
+      this.highlightButton("send", true);
     });
     sendBtnHit.on("pointerup", () => {
       this.tideDir = 0;
-      this.highlightButton('send', false);
+      this.highlightButton("send", false);
     });
     sendBtnHit.on("pointerout", () => {
       this.tideDir = 0;
-      this.highlightButton('send', false);
+      this.highlightButton("send", false);
     });
 
     this.easeBtnG = this.add.graphics();
@@ -177,25 +177,26 @@ export default class Game extends Phaser.Scene {
       .setInteractive({ useHandCursor: true });
     easeBtnHit.on("pointerdown", () => {
       this.tideDir = -1;
-      this.highlightButton('ease', true);
+      this.highlightButton("ease", true);
     });
     easeBtnHit.on("pointerup", () => {
       this.tideDir = 0;
-      this.highlightButton('ease', false);
+      this.highlightButton("ease", false);
     });
     easeBtnHit.on("pointerout", () => {
       this.tideDir = 0;
-      this.highlightButton('ease', false);
+      this.highlightButton("ease", false);
     });
 
     // --- Key Mapping Description ---
-    this.keyDescText = this.add.text(512, 600, "[A] or [←] = EASE TIDE   |   [D] or [→] = SEND WAVE", {
-      fontFamily: "Arial",
-      fontSize: 22,
-      color: "#444",
-      align: "center"
-    }).setOrigin(0.5);
-
+    this.keyDescText = this.add
+      .text(512, 600, "[A] or [←] = EASE TIDE   |   [D] or [→] = SEND WAVE", {
+        fontFamily: "Arial",
+        fontSize: 22,
+        color: "#444",
+        align: "center",
+      })
+      .setOrigin(0.5);
 
     // --- Keyboard controls ---
     this.keys = this.input.keyboard.addKeys({
@@ -207,37 +208,36 @@ export default class Game extends Phaser.Scene {
     this.input.keyboard.on("keydown", (event) => {
       if (event.code === "KeyA" || event.code === "ArrowLeft") {
         this.tideDir = -1;
-        this.highlightButton('ease', true);
+        this.highlightButton("ease", true);
       } else if (event.code === "KeyD" || event.code === "ArrowRight") {
         this.tideDir = 1;
-        this.highlightButton('send', true);
+        this.highlightButton("send", true);
       }
     });
     this.input.keyboard.on("keyup", (event) => {
       if (event.code === "KeyA" || event.code === "ArrowLeft") {
         this.tideDir = 0;
-        this.highlightButton('ease', false);
+        this.highlightButton("ease", false);
       } else if (event.code === "KeyD" || event.code === "ArrowRight") {
         this.tideDir = 0;
-        this.highlightButton('send', false);
+        this.highlightButton("send", false);
       }
     });
 
     // --- Helper for button highlighting ---
     this.highlightButton = (which, on) => {
-      if (which === 'send') {
+      if (which === "send") {
         this.sendBtnG.clear();
         this.sendBtnG.lineStyle(4, on ? 0x1d3557 : 0x888888, 1);
         this.sendBtnG.strokeRoundedRect(180, 630, btnW, btnH, btnR);
         this.sendBtnText.setColor(on ? "#1d3557" : "#444");
-      } else if (which === 'ease') {
+      } else if (which === "ease") {
         this.easeBtnG.clear();
         this.easeBtnG.lineStyle(4, on ? 0x1d3557 : 0x888888, 1);
         this.easeBtnG.strokeRoundedRect(584, 630, btnW, btnH, btnR);
         this.easeBtnText.setColor(on ? "#1d3557" : "#444");
       }
     };
-
 
     // --- Game Over Text (hidden by default) ---
     this.gameOverText = this.add
@@ -256,24 +256,28 @@ export default class Game extends Phaser.Scene {
     this.retryBtnG.strokeRoundedRect(362, 470, 300, 70, 22);
     this.retryBtnG.fillStyle(0xf7fafd, 1);
     this.retryBtnG.fillRoundedRect(362, 470, 300, 70, 22);
-    this.retryBtnText = this.add.text(512, 505, "RETRY", {
-      fontFamily: "Arial Black",
-      fontSize: 38,
-      color: "#1d3557",
-      align: "center"
-    }).setOrigin(0.5).setDepth(22);
-    this.retryBtnHit = this.add.rectangle(512, 505, 300, 70, 0x000000, 0)
+    this.retryBtnText = this.add
+      .text(512, 505, "RETRY", {
+        fontFamily: "Arial Black",
+        fontSize: 38,
+        color: "#1d3557",
+        align: "center",
+      })
+      .setOrigin(0.5)
+      .setDepth(22);
+    this.retryBtnHit = this.add
+      .rectangle(512, 505, 300, 70, 0x000000, 0)
       .setOrigin(0.5)
       .setInteractive({ useHandCursor: true })
       .setDepth(23);
     this.retryBtnG.setVisible(false);
     this.retryBtnText.setVisible(false);
     this.retryBtnHit.setVisible(false);
-    this.retryBtnHit.on('pointerdown', () => {
+    this.retryBtnHit.on("pointerdown", () => {
       this.scene.restart();
     });
     // Hide retry if restarting
-    this.events.on('shutdown', () => {
+    this.events.on("shutdown", () => {
       this.retryBtnG.setVisible(false);
       this.retryBtnText.setVisible(false);
       this.retryBtnHit.setVisible(false);
@@ -399,7 +403,6 @@ export default class Game extends Phaser.Scene {
         this.retryBtnG.setVisible(true);
         this.retryBtnText.setVisible(true);
         this.retryBtnHit.setVisible(true);
-
       }
     } else {
       this.tideTimer = 0;
@@ -428,7 +431,7 @@ export default class Game extends Phaser.Scene {
     }
     // Indicator
     let y = 40 + (1 - this.tide) * 160;
-    let color = inBalanced ? 0x2ecc71 : 0xff4d4d;
+    let color = inBalanced ? 0xffe066 : 0xff4d4d; // yellow if balanced, red if danger
     this.harmonyMeter.fillStyle(color, 1);
     this.harmonyMeter.fillRoundedRect(46, y - 12, 40, 24, 8);
     // Numeric display
