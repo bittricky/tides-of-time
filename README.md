@@ -5,7 +5,7 @@ A web-based game about balancing the tides and maintaining balance between land 
 
 ## Game Overview
 
-Tides of Time invites players to experience the balance by giving the player the ability to create balance. Guide the tide, maintain balance, and witness the interplay between cause and effect.
+Tides of Time invites players to experience the balance by giving the player the power to create balance. Guide the tide, maintain balance, and witness the interplay between cause and effect.
 
 ## Features Completed
 
@@ -52,17 +52,12 @@ Tides of Time invites players to experience the balance by giving the player the
 
 ## Philosophy: Daoism, Zen, Advaita Vedanta, and the Art of Balance
 
-Tides of Time is shaped by the living wisdom of Eastern philosophy, inviting players to experience—not merely simulate—the principles of harmony, interdependence, and presence:
-
-- **Daoism:** The game is an invitation to attune oneself to the natural rhythm of the tides. Like the Daoist sage, the player acts without striving, gently guiding the flow rather than imposing their will. The most skillful play emerges from attentive, non-coercive presence—responding to what is, rather than forcing what should be.
+- **Effortless Action:** The game is an invitation to get into a state of flow. Without excessive thought or analysis, the player gently guides the flow, responding to what is happening in the moment. The most skillful play emerges from attentive, non-coercive presence.
 - **Cyclical Interdependence:** The oscillation of land and sea, the dance of danger and safety, reflect the ever-changing, cyclical nature of existence. Each action creates ripples; each moment of balance is both an end and a beginning. Dualities are not opposites to be conquered, but partners in a dynamic, living whole.
 - **Non-Dual Awareness:** Drawing from Zen and Advaita Vedanta, the game dissolves the boundary between player and system. There is no "winning" against the tide—only the opportunity to participate in its unfolding. The experience is meditative, inviting surrender to change, acceptance of impermanence, and delight in the subtle interplay of cause and effect.
 
-Through its mechanics and mood, Tides of Time aspires to cultivate a sense of calm, presence, and reverence for the interconnectedness of all things—on the screen, and beyond.
-
 ---
 
-Enjoy your journey with the tides!
 
 ## Requirements
 
