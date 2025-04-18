@@ -54,9 +54,17 @@ Tides of Time invites players to experience the balance by giving the player the
 
 > Daoism, Zen, Advaita Vedanta, and the general Art of Balance
 
-- **Effortless Action:** The game is an invitation to get into a state of flow. Without excessive thought or analysis, the player gently guides the flow, responding to what is happening in the moment. The most skillful play emerges from attentive, non-coercive presence.
-- **Cyclical Interdependence:** The oscillation of land and sea, the dance of danger and safety, reflect the ever-changing, cyclical nature of existence. Each action creates ripples; each moment of balance is both an end and a beginning. Dualities are not opposites to be conquered, but partners in a dynamic, living whole.
-- **Non-Dual Awareness:** Drawing from Zen and Advaita Vedanta, the game dissolves the boundary between player and system. There is no "winning" against the tide—only the opportunity to participate in its unfolding. The experience is meditative, inviting surrender to change, acceptance of impermanence, and delight in the subtle interplay of cause and effect.
+**Effortless Action:** 
+
+The game is an invitation to get into a state of flow. Without excessive thought or analysis, the player gently guides the flow, responding to what is happening in the moment. The most skillful play emerges from attentive, non-coercive presence.
+
+**Cyclical Interdependence:** 
+
+The oscillation of land and sea, the dance of danger and safety, reflect the ever-changing, cyclical nature of existence. Each action creates ripples; each moment of balance is both an end and a new beginning. Dualities are not opposites to be conquered, but partners in a dynamic, living whole. An Ecology.
+
+**Non-Dual Awareness:** 
+
+Drawing from Zen and Advaita Vedanta, the game dissolves the boundary between player and system. There is no "winning" against the tide—only the opportunity to participate in its unfolding. The experience can be meditative, welcoming change, accepting impermanence, and finding delight in the subtle interplay of cause and effect.
 
 ---
 
