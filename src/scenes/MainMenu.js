@@ -40,20 +40,7 @@ export class MainMenu extends Scene {
     landG.lineStyle(0, 0, 0);
     landG.fillStyle(0xdbe1e4, 1);
     landG.fillRect(cardX - cardW / 2 + 32, cardY, cardW - 64, cardH / 2 - 32);
-    // Trees (simple triangles)
-    function drawTree(g, x, y, size) {
-      g.fillStyle(0xadb6bc, 1);
-      g.beginPath();
-      g.moveTo(x, y - size * 1.2);
-      g.lineTo(x - size, y + size);
-      g.lineTo(x + size, y + size);
-      g.closePath();
-      g.fillPath();
-      g.fillRect(x - size / 5, y + size, size * 0.4, size * 1.1);
-    }
-    drawTree(landG, cardX - 80, cardY + 60, 38);
-    drawTree(landG, cardX, cardY + 40, 54);
-    drawTree(landG, cardX + 70, cardY + 64, 30);
+
     // Ocean - two wavy lines
     landG.lineStyle(8, 0xaeb6bb, 1);
     for (let i = 0; i < 2; i++) {

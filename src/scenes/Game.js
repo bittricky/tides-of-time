@@ -443,7 +443,7 @@ export default class Game extends Phaser.Scene {
         );
         // Show high score on game over
         let msg =
-          "Game Over:\n The flow was broken. Balance is a practice, not a destination. \nScore: " +
+          "Game Over:\n The flow was broken. Balance is a practice.\nScore: " +
           Math.round(this.score) +
           "\nHigh Score: " +
           Math.round(this.highScore);
