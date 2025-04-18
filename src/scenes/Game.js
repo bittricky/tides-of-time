@@ -274,7 +274,7 @@ export default class Game extends Phaser.Scene {
     this.retryBtnText.setVisible(false);
     this.retryBtnHit.setVisible(false);
     this.retryBtnHit.on("pointerdown", () => {
-      console.log('[DEBUG] Retry button pressed, restarting scene.');
+      console.log("[DEBUG] Retry button pressed, restarting scene.");
       this.scene.restart();
     });
     // Hide retry if restarting
@@ -285,16 +285,17 @@ export default class Game extends Phaser.Scene {
     });
 
     // --- DEBUG OVERLAY ---
-    this.debugText = this.add.text(10, 10, '', {
-      fontFamily: 'monospace',
-      fontSize: 16,
-      color: '#ff0',
-      backgroundColor: 'rgba(0,0,0,0.6)',
-      padding: { left: 6, right: 6, top: 2, bottom: 2 },
-      align: 'left',
-      wordWrap: { width: 340 }
-    }).setDepth(2000);
-
+    this.debugText = this.add
+      .text(10, 10, "", {
+        fontFamily: "monospace",
+        fontSize: 16,
+        color: "#ff0",
+        backgroundColor: "rgba(0,0,0,0.6)",
+        padding: { left: 6, right: 6, top: 2, bottom: 2 },
+        align: "left",
+        wordWrap: { width: 340 },
+      })
+      .setDepth(2000);
   }
 
   update() {
@@ -302,17 +303,19 @@ export default class Game extends Phaser.Scene {
     if (this.debugText) {
       this.debugText.setText(
         `gameOver: ${this.gameOver}\n` +
-        `tide: ${this.tide}\n` +
-        `tideDir: ${this.tideDir}\n` +
-        `score: ${this.score}\n` +
-        `highScore: ${this.highScore}\n` +
-        `dangerTimer: ${this.dangerTimer}`
+          `tide: ${this.tide}\n` +
+          `tideDir: ${this.tideDir}\n` +
+          `score: ${this.score}\n` +
+          `highScore: ${this.highScore}\n` +
+          `dangerTimer: ${this.dangerTimer}`
       );
     }
     // Check for true game over at the very start
     if (this.tide <= 0 || this.tide >= 1) {
       if (!this.gameOver) {
-        console.log('[DEBUG] Game over triggered: tide at extreme. tide=' + this.tide);
+        console.log(
+          "[DEBUG] Game over triggered: tide at extreme. tide=" + this.tide
+        );
         this.gameOver = true;
         // Show high score on game over
         let msg =
@@ -394,7 +397,10 @@ export default class Game extends Phaser.Scene {
       if (this.dangerTimer > 120) {
         // 2 seconds in danger margin
         this.gameOver = true;
-        console.log('[DEBUG] Game over triggered: danger margin timeout. tide=' + this.tide);
+        console.log(
+          "[DEBUG] Game over triggered: danger margin timeout. tide=" +
+            this.tide
+        );
         // Show high score on game over
         let msg =
           "Game Over:\n The tides lingered at the edge too long\nScore: " +
@@ -413,10 +419,12 @@ export default class Game extends Phaser.Scene {
     // Immediate game over if meter is at the absolute ends
     if (this.tide <= 0 || this.tide >= 1) {
       this.gameOver = true;
-      console.log('[DEBUG] Game over triggered: tide at extreme. tide=' + this.tide);
+      console.log(
+        "[DEBUG] Game over triggered: tide at extreme. tide=" + this.tide
+      );
       this.gameOverText.setText(
         "Game Over:\n You've been overwhelmed by the tides \nScore: " +
-        Math.round(this.score)
+          Math.round(this.score)
       );
       this.retryBtnG.setVisible(true);
       this.retryBtnText.setVisible(true);
@@ -429,10 +437,13 @@ export default class Game extends Phaser.Scene {
       if (this.tideTimer > 180) {
         // ~3s
         this.gameOver = true;
-        console.log('[DEBUG] Game over triggered: out of balance too long. tide=' + this.tide);
+        console.log(
+          "[DEBUG] Game over triggered: out of balance too long. tide=" +
+            this.tide
+        );
         // Show high score on game over
         let msg =
-          "Game Over:\n You've fallen out of balance\nScore: " +
+          "Game Over:\n You've created an imbalance\nScore: " +
           Math.round(this.score) +
           "\nHigh Score: " +
           Math.round(this.highScore);
@@ -467,7 +478,8 @@ export default class Game extends Phaser.Scene {
       this.harmonyMeter.strokeRoundedRect(40, 40, 48, 160, 16);
     }
     // Defensive: ensure tide is a number
-    let tide = (typeof this.tide === 'number' && !isNaN(this.tide)) ? this.tide : 0.5;
+    let tide =
+      typeof this.tide === "number" && !isNaN(this.tide) ? this.tide : 0.5;
     // Indicator
     let y = 40 + (1 - tide) * 160;
     let color = inBalanced ? 0xffe066 : 0xff4d4d; // yellow if balanced, red if danger
