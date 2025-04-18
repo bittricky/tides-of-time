@@ -1,17 +1,68 @@
-# Phaser Webpack Template
+# Tides of Time
 
-This is a Phaser 3 project template that uses webpack for bundling. It supports hot-reloading for quick development workflow and includes scripts to generate production-ready builds.
+A web-based game about balancing the tides and maintaining balance between land and ocean life. Built with Phaser 3 and Webpack.
 
-**[This Template is also available as a TypeScript version.](https://github.com/phaserjs/template-webpack-ts)**
 
-### Versions
+## Game Overview
 
-This template has been updated for:
+Tides of Time invites players to experience the balance by giving the player the ability to create balance. Guide the tide, maintain balance, and witness the interplay between cause and effect.
 
-- [Phaser 3.88.2](https://github.com/phaserjs/phaser)
-- [Webpack 5.91.0](https://github.com/webpack/webpack)
+## Features Completed
 
-![screenshot](screenshot.png)
+- **Core Gameplay:**
+  - Oscillating tide mechanic with player input to influence direction.
+  - Land and ocean life visuals that react to tide state.
+  - Harmony meter and danger margin system.
+- **Game Over & Retry:**
+  - Game ends if tide reaches extremes or stays in danger margin too long.
+  - Retry button and high score display on Game Over screen.
+- **High Score Tracking:**
+  - Local storage persistence for best score.
+- **Debug Overlay:**
+  - Real-time display of game state variables for development and bug tracking.
+- **Robust Error Handling:**
+  - Strict guards prevent invalid state (e.g., NaN values) from breaking gameplay.
+  - Detailed logging for debugging.
+
+## Technical Instructions
+
+### Requirements
+- [Node.js](https://nodejs.org)
+
+### Setup & Running Locally
+1. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+2. **Start the development server:**
+   ```bash
+   npm run dev
+   ```
+   The game will be available at [http://localhost:8080](http://localhost:8080).
+3. **Build for production:**
+   ```bash
+   npm run build
+   ```
+   Output will be in the `dist` folder.
+
+### Project Structure
+- `src/` — Main game source code (scenes, logic, assets)
+- `public/` — Static assets (images, audio, etc.)
+- `index.html` — Main HTML entry point
+
+## Philosophy: Daoism, Zen, Advaita Vedanta, and the Art of Balance
+
+Tides of Time is shaped by the living wisdom of Eastern philosophy, inviting players to experience—not merely simulate—the principles of harmony, interdependence, and presence:
+
+- **Daoism:** The game is an invitation to attune oneself to the natural rhythm of the tides. Like the Daoist sage, the player acts without striving, gently guiding the flow rather than imposing their will. The most skillful play emerges from attentive, non-coercive presence—responding to what is, rather than forcing what should be.
+- **Cyclical Interdependence:** The oscillation of land and sea, the dance of danger and safety, reflect the ever-changing, cyclical nature of existence. Each action creates ripples; each moment of balance is both an end and a beginning. Dualities are not opposites to be conquered, but partners in a dynamic, living whole.
+- **Non-Dual Awareness:** Drawing from Zen and Advaita Vedanta, the game dissolves the boundary between player and system. There is no "winning" against the tide—only the opportunity to participate in its unfolding. The experience is meditative, inviting surrender to change, acceptance of impermanence, and delight in the subtle interplay of cause and effect.
+
+Through its mechanics and mood, Tides of Time aspires to cultivate a sense of calm, presence, and reverence for the interconnectedness of all things—on the screen, and beyond.
+
+---
+
+Enjoy your journey with the tides!
 
 ## Requirements
 
