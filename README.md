@@ -214,4 +214,4 @@ They love to see what developers like you create with Phaser! It really motivate
 **Code:** 2000+ [Examples](https://labs.phaser.io)<br />
 **Read:** The [Phaser World](https://phaser.io/community/newsletter) Newsletter<br />
 
-Created by [Phaser Studio](mailto:support@phaser.io). Powered by coffee, anime, pixels and love.
+Created with [Phaser Studio](mailto:support@phaser.io).
