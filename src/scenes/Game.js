@@ -178,13 +178,15 @@ export default class Game extends Phaser.Scene {
       btnR = 16;
     // Store graphics for highlighting
     this.sendBtnG = this.add.graphics();
-    this.sendBtnG.lineStyle(4, 0x888888, 1);
+    this.sendBtnG.lineStyle(4, 0xffe066, 1);
+    this.sendBtnG.fillStyle(0xffe066, 1);
+    this.sendBtnG.fillRoundedRect(180, 630, btnW, btnH, btnR);
     this.sendBtnG.strokeRoundedRect(180, 630, btnW, btnH, btnR);
     this.sendBtnText = this.add
       .text(310, 665, "SEND WAVE", {
         fontFamily: "Arial Black",
         fontSize: 32,
-        color: "#444",
+        color: "#bfa200",
       })
       .setOrigin(0.5);
     const sendBtnHit = this.add
@@ -204,13 +206,15 @@ export default class Game extends Phaser.Scene {
     });
 
     this.easeBtnG = this.add.graphics();
-    this.easeBtnG.lineStyle(4, 0x888888, 1);
+    this.easeBtnG.lineStyle(4, 0xffe066, 1);
+    this.easeBtnG.fillStyle(0xffe066, 1);
+    this.easeBtnG.fillRoundedRect(584, 630, btnW, btnH, btnR);
     this.easeBtnG.strokeRoundedRect(584, 630, btnW, btnH, btnR);
     this.easeBtnText = this.add
       .text(714, 665, "EASE TIDE", {
         fontFamily: "Arial Black",
         fontSize: 32,
-        color: "#444",
+        color: "#bfa200",
       })
       .setOrigin(0.5);
     const easeBtnHit = this.add
@@ -269,14 +273,18 @@ export default class Game extends Phaser.Scene {
     this.highlightButton = (which, on) => {
       if (which === "send") {
         this.sendBtnG.clear();
-        this.sendBtnG.lineStyle(4, on ? 0x1d3557 : 0x888888, 1);
+        this.sendBtnG.lineStyle(4, on ? 0xffe066 : 0xffe066, 1);
+        this.sendBtnG.fillStyle(on ? 0xffe066 : 0xffe066, 1);
+        this.sendBtnG.fillRoundedRect(180, 630, btnW, btnH, btnR);
         this.sendBtnG.strokeRoundedRect(180, 630, btnW, btnH, btnR);
-        this.sendBtnText.setColor(on ? "#1d3557" : "#444");
+        this.sendBtnText.setColor(on ? "#bfa200" : "#bfa200");
       } else if (which === "ease") {
         this.easeBtnG.clear();
-        this.easeBtnG.lineStyle(4, on ? 0x1d3557 : 0x888888, 1);
+        this.easeBtnG.lineStyle(4, on ? 0xffe066 : 0xffe066, 1);
+        this.easeBtnG.fillStyle(on ? 0xffe066 : 0xffe066, 1);
+        this.easeBtnG.fillRoundedRect(584, 630, btnW, btnH, btnR);
         this.easeBtnG.strokeRoundedRect(584, 630, btnW, btnH, btnR);
-        this.easeBtnText.setColor(on ? "#1d3557" : "#444");
+        this.easeBtnText.setColor(on ? "#bfa200" : "#bfa200");
       }
     };
 
