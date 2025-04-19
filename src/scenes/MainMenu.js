@@ -34,45 +34,39 @@ export class MainMenu extends Scene {
       cardR
     );
 
-    // --- Stylized landscape inside card ---
-    const landG = this.add.graphics().setDepth(1);
-    // Horizon
-    landG.lineStyle(0, 0, 0);
-    landG.fillStyle(0xdbe1e4, 1);
-    landG.fillRect(cardX - cardW / 2 + 32, cardY, cardW - 64, cardH / 2 - 32);
+    // --- Wave image inside card ---
+    const waveTexture = this.textures.get("grey_wave").getSourceImage();
+    const waveNaturalW = waveTexture.width;
+    const waveNaturalH = waveTexture.height;
 
-    // Ocean - two wavy lines
-    landG.lineStyle(8, 0xaeb6bb, 1);
-    for (let i = 0; i < 2; i++) {
-      let waveY = cardY + cardH / 4 + 34 * i;
-      landG.beginPath();
-      for (
-        let x = cardX - cardW / 2 + 40, j = 0;
-        x <= cardX + cardW / 2 - 40;
-        x += 8, j++
-      ) {
-        let y = waveY + Math.sin(j * 0.14 + (i * Math.PI) / 2) * 22;
-        if (x === cardX - cardW / 2 + 40) landG.moveTo(x, y);
-        else landG.lineTo(x, y);
-      }
-      landG.strokePath();
-    }
-    // Lower land (darker)
-    landG.fillStyle(0xb0b6bb, 1);
-    landG.beginPath();
-    landG.moveTo(cardX - cardW / 2 + 32, cardY + cardH / 4 + 48);
-    for (
-      let x = cardX - cardW / 2 + 32, j = 0;
-      x <= cardX + cardW / 2 - 32;
-      x += 8, j++
-    ) {
-      let y = cardY + cardH / 4 + 48 + Math.sin(j * 0.13 + 1.1) * 38;
-      landG.lineTo(x, y);
-    }
-    landG.lineTo(cardX + cardW / 2 - 32, cardY + cardH / 2 - 32);
-    landG.lineTo(cardX - cardW / 2 + 32, cardY + cardH / 2 - 32);
-    landG.closePath();
-    landG.fillPath();
+    // Get title position for reference
+    const titleY = cardY - 90;
+
+    // Set horizontal and vertical margins for containment
+    const horizontalMargin = 32;
+    const verticalMarginTop = 24;
+    const verticalMarginBottom = 24;
+
+    // Calculate max allowed width and height for the wave
+    const maxWaveW = cardW - 2 * horizontalMargin;
+    const maxWaveH = cardH - (titleY - (cardY - cardH / 2)) - verticalMarginTop - verticalMarginBottom;
+
+    // Scale wave to fit within both width and height constraints
+    const scale = Math.min(maxWaveW / waveNaturalW, maxWaveH / waveNaturalH);
+    const waveDisplayW = waveNaturalW * scale;
+    const waveDisplayH = waveNaturalH * scale;
+
+    // Position: top of wave is 24px below title, bottom stays above card edge
+    const titleBottomY = titleY + 36; // Approximate bottom of title text
+    const waveY = titleBottomY + verticalMarginTop + waveDisplayH / 2;
+
+
+    const waveImg = this.add.image(cardX, waveY, "grey_wave").setOrigin(0.5, 0.5);
+    waveImg.displayWidth = waveDisplayW;
+    waveImg.displayHeight = waveDisplayH;
+    // No tint needed, already grey
+    waveImg.setAlpha(1); // Full opacity
+    waveImg.setDepth(5);
 
     // --- Title text ---
     this.add

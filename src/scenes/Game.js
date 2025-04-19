@@ -28,14 +28,61 @@ export default class Game extends Phaser.Scene {
 
     // --- UI: Harmony Meter (atlas-based, create before updateHarmonyMeter) ---
     // Use atlas keys: 'harmony_meter' for indicator, 'meter_bg' for background
-    try {
-      this.harmonyMeterBg = this.add.sprite(64, 120, 'natureElements', 'meter_bg').setOrigin(0.5, 0).setDepth(99);
-      this.harmonyMeterIndicator = this.add.sprite(64, 120, 'natureElements', 'harmony_meter').setOrigin(0.5, 0).setDepth(100);
-    } catch (e) {
-      console.warn('Could not create harmony meter from atlas, falling back to rectangles:', e);
-      this.harmonyMeterBg = this.add.rectangle(64, 120, 52, 128, 0xcccccc).setOrigin(0.5, 0).setDepth(99);
-      this.harmonyMeterIndicator = this.add.rectangle(64, 120, 48, 16, 0xffe066).setOrigin(0.5, 0).setDepth(100);
+    // PIXEL-PERFECT DRAWN BALANCE METER (matches water_meter.png)
+    const meterX = 64, meterY = 120, meterW = 52, meterH = 160, meterR = 12;
+    const bandH = meterH / 4;
+    // Colors from the PNG (approximate)
+    const colorTop = 0xe4efe5;
+    const colorBand1 = 0xb5d8db;
+    const colorBand2 = 0x7bc0c9;
+    const colorBand3 = 0x3e8c99;
+    const colorDivider = 0xd0c39d;
+    const colorWavy = 0xb5d8db;
+    const labelColor = '#a0915d';
+    // Draw meter background (rounded rect)
+    this.harmonyMeterG = this.add.graphics({ x: 0, y: 0 }).setDepth(99);
+    this.harmonyMeterG.fillStyle(colorTop, 1);
+    this.harmonyMeterG.fillRoundedRect(meterX - meterW/2, meterY, meterW, meterH, meterR);
+    // Draw color bands (from top to bottom)
+    this.harmonyMeterG.fillStyle(colorBand1, 1);
+    this.harmonyMeterG.fillRect(meterX - meterW/2, meterY + bandH, meterW, bandH);
+    this.harmonyMeterG.fillStyle(colorBand2, 1);
+    this.harmonyMeterG.fillRect(meterX - meterW/2, meterY + 2*bandH, meterW, bandH);
+    this.harmonyMeterG.fillStyle(colorBand3, 1);
+    this.harmonyMeterG.fillRect(meterX - meterW/2, meterY + 3*bandH, meterW, bandH);
+    // Draw dividing lines
+    this.harmonyMeterG.lineStyle(2, colorDivider, 1);
+    for (let i = 1; i < 4; i++) {
+      this.harmonyMeterG.strokeLineShape(new Phaser.Geom.Line(
+        meterX - meterW/2, meterY + i*bandH,
+        meterX + meterW/2, meterY + i*bandH
+      ));
     }
+    // Draw wavy water line at the top of band 1
+    this.harmonyMeterG.lineStyle(2, colorWavy, 1);
+    this.harmonyMeterG.beginPath();
+    for (let i = 0; i <= meterW; i += 2) {
+      const wx = meterX - meterW/2 + i;
+      const wy = meterY + bandH + Math.sin(i/10) * 6;
+      if (i === 0) this.harmonyMeterG.moveTo(wx, wy);
+      else this.harmonyMeterG.lineTo(wx, wy);
+    }
+    this.harmonyMeterG.strokePath();
+    // Draw vertical label bar
+    this.harmonyMeterG.lineStyle(5, colorDivider, 1);
+    this.harmonyMeterG.strokeLineShape(new Phaser.Geom.Line(meterX - meterW/2 - 32, meterY, meterX - meterW/2 - 32, meterY + meterH));
+    // Draw only the vertical label bar as a visual separator
+    const labelBarX = meterX - meterW/2 - 32;
+    const labelBar = this.add.graphics({x:0, y:0}).setDepth(199);
+    labelBar.lineStyle(4, colorDivider, 1);
+    labelBar.strokeLineShape(new Phaser.Geom.Line(labelBarX, meterY, labelBarX, meterY + meterH));
+    // Add back text labels LOW, BALANCED, HIGH in the meter's color scheme
+    const labelFont = { fontFamily: 'Arial Black', fontSize: 28, color: '#a0915d', fontStyle: 'bold' };
+    this.add.text(labelBarX - 10, meterY + 2, 'LOW', labelFont).setOrigin(1, 0).setDepth(300);
+    this.add.text(labelBarX - 10, meterY + meterH/2, 'BALANCED', labelFont).setOrigin(1, 0.5).setDepth(300);
+    this.add.text(labelBarX - 10, meterY + meterH - 2, 'HIGH', labelFont).setOrigin(1, 1).setDepth(300);
+    // Indicator rectangle sized to fit inside the meter
+    this.harmonyMeterIndicator = this.add.rectangle(meterX, meterY, 48, 16, 0xffe066).setOrigin(0.5, 0).setDepth(100);
     this.harmonyValueText = this.add
       .text(64, 210, "", {
         fontFamily: "Arial Black",
@@ -526,13 +573,24 @@ export default class Game extends Phaser.Scene {
     let indicatorY = 120 + (1 - tide) * 160;
     if (this.harmonyMeterIndicator) {
       this.harmonyMeterIndicator.y = indicatorY;
-      // Tint the indicator for danger/balance
-      if (inBalanced) {
-        this.harmonyMeterIndicator.setTint(0xffe066);
-        if (this.harmonyMeterBg) this.harmonyMeterBg.setAlpha(1);
+      // Only tint if the indicator supports setTint (i.e., is a Sprite or Image)
+      if (typeof this.harmonyMeterIndicator.setTint === 'function') {
+        if (inBalanced) {
+          this.harmonyMeterIndicator.setTint(0xffe066);
+          if (this.harmonyMeterBg && typeof this.harmonyMeterBg.setAlpha === 'function') this.harmonyMeterBg.setAlpha(1);
+        } else {
+          this.harmonyMeterIndicator.setTint(0xff4d4d);
+          if (this.harmonyMeterBg && typeof this.harmonyMeterBg.setAlpha === 'function') this.harmonyMeterBg.setAlpha(0.8);
+        }
       } else {
-        this.harmonyMeterIndicator.setTint(0xff4d4d);
-        if (this.harmonyMeterBg) this.harmonyMeterBg.setAlpha(0.8);
+        // Rectangle: change fillColor instead
+        if (inBalanced) {
+          this.harmonyMeterIndicator.fillColor = 0xffe066;
+          if (this.harmonyMeterBg && typeof this.harmonyMeterBg.setAlpha === 'function') this.harmonyMeterBg.setAlpha(1);
+        } else {
+          this.harmonyMeterIndicator.fillColor = 0xff4d4d;
+          if (this.harmonyMeterBg && typeof this.harmonyMeterBg.setAlpha === 'function') this.harmonyMeterBg.setAlpha(0.8);
+        }
       }
     } else {
       console.warn('harmonyMeterIndicator is undefined');
