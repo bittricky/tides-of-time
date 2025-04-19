@@ -26,35 +26,16 @@ export default class Game extends Phaser.Scene {
     // Load high score from localStorage or default to 0
     this.highScore = Number(window.localStorage.getItem("highScore")) || 0;
 
-    // --- UI: Harmony Meter ---
-    this.harmonyG = this.add.graphics().setDepth(100);
-    // Draw thick border
-    this.harmonyG.lineStyle(6, 0x222f3e, 1);
-    this.harmonyG.strokeRoundedRect(40, 40, 48, 160, 16);
-    // Draw 'balanced' zone highlight
-    this.harmonyG.fillStyle(0xc7f7d3, 0.4);
-    this.harmonyG.fillRoundedRect(42, 40 + 160 * 0.33, 44, 160 * 0.34, 12);
-    // Draw meter ticks
-    this.harmonyG.lineStyle(2, 0x444444, 1);
-    for (let i = 0; i < 6; i++) {
-      this.harmonyG.lineBetween(40, 40 + i * 32, 88, 40 + i * 32);
+    // --- UI: Harmony Meter (atlas-based, create before updateHarmonyMeter) ---
+    // Use atlas keys: 'harmony_meter' for indicator, 'meter_bg' for background
+    try {
+      this.harmonyMeterBg = this.add.sprite(64, 120, 'natureElements', 'meter_bg').setOrigin(0.5, 0).setDepth(99);
+      this.harmonyMeterIndicator = this.add.sprite(64, 120, 'natureElements', 'harmony_meter').setOrigin(0.5, 0).setDepth(100);
+    } catch (e) {
+      console.warn('Could not create harmony meter from atlas, falling back to rectangles:', e);
+      this.harmonyMeterBg = this.add.rectangle(64, 120, 52, 128, 0xcccccc).setOrigin(0.5, 0).setDepth(99);
+      this.harmonyMeterIndicator = this.add.rectangle(64, 120, 48, 16, 0xffe066).setOrigin(0.5, 0).setDepth(100);
     }
-    this.harmonyTextLow = this.add.text(98, 52, "Low", {
-      fontFamily: "Arial",
-      fontSize: 22,
-      color: "#444",
-    });
-    this.harmonyTextBal = this.add.text(98, 100, "Balanced", {
-      fontFamily: "Arial",
-      fontSize: 22,
-      color: "#444",
-    });
-    this.harmonyTextHigh = this.add.text(98, 168, "High", {
-      fontFamily: "Arial",
-      fontSize: 22,
-      color: "#444",
-    });
-    this.harmonyMeter = this.add.graphics().setDepth(101);
     this.harmonyValueText = this.add
       .text(64, 210, "", {
         fontFamily: "Arial Black",
@@ -68,47 +49,60 @@ export default class Game extends Phaser.Scene {
     // --- Harmony Meter Indicator (updates in update()) ---
     this.updateHarmonyMeter();
 
-    // --- Land/Ocean (simple, stylized) ---
-    const landG = this.add.graphics();
-    landG.lineStyle(3, 0x888888, 1);
-    landG.beginPath();
-    landG.moveTo(0, 320);
-    for (let x = 0; x <= 1024; x += 24) {
-      let y = 320 + Math.sin(x * 0.008) * 22;
-      landG.lineTo(x, y);
-    }
-    landG.lineTo(1024, 420);
-    landG.lineTo(0, 420);
-    landG.closePath();
-    landG.strokePath();
-    landG.fillStyle(0xf5f5f5, 1);
-    landG.fillPath();
+    // --- Visual Background ---
+    this.add.image(512, 384, 'beach').setDepth(-10).setDisplaySize(1024, 768);
 
-    // --- Ocean (wavy lines) ---
-    const oceanG = this.add.graphics();
-    oceanG.lineStyle(3, 0x888888, 1);
-    for (let i = 0; i < 6; i++) {
-      let waveY = 440 + i * 32;
-      oceanG.beginPath();
-      for (let x = 0; x <= 1024; x += 16) {
-        let y = waveY + Math.sin(x * 0.012 + i * 1.2) * 14;
-        oceanG.lineTo(x, y);
-      }
-      oceanG.strokePath();
-    }
+    // --- Land/Ocean (remove old graphics) ---
+    // (Old landG and oceanG code removed for clarity)
 
-    // --- Placeholder Animals/Life ---
-    // --- Placeholder Animals/Life (with pulse animation state) ---
-    this.landAnimals = [
-      this.add.ellipse(250, 290, 38, 24, 0xcccccc), // tree
-      this.add.ellipse(410, 300, 38, 24, 0xcccccc), // tree
-      this.add.ellipse(600, 280, 32, 22, 0xcccccc), // crab
-    ];
-    this.oceanLife = [
-      this.add.ellipse(200, 500, 34, 18, 0xcccccc), // fish
-      this.add.ellipse(420, 540, 24, 24, 0xcccccc), // coral
-      this.add.ellipse(800, 520, 34, 18, 0xcccccc), // fish
-    ];
+    // --- Nature Sprites ---
+    // Use frames from 'natureElements' spritesheet:
+    // Example: 0 = palm tree, 1 = pine tree, 2 = bush, 3 = rock, 4 = crab, 5 = fish, 6 = coral, etc.
+    // --- Land Elements (trees, bush, rock, crab) ---
+    try {
+      // --- Land Elements (trees, crab, bird, etc.) using atlas keys ---
+      this.landElements = [
+        this.add.sprite(140, 270, 'natureElements', 'tree1').setScale(0.7),
+        this.add.sprite(200, 285, 'natureElements', 'tree2').setScale(0.7),
+        this.add.sprite(260, 295, 'natureElements', 'tree3').setScale(0.7),
+        this.add.sprite(320, 305, 'natureElements', 'tree4').setScale(0.7),
+        this.add.sprite(380, 320, 'natureElements', 'crab').setScale(0.6),
+        this.add.sprite(440, 255, 'natureElements', 'bird').setScale(0.7),
+        this.add.sprite(70, 220, 'natureElements', 'cloud').setScale(0.9)
+      ];
+      // --- Ocean Elements (fish, seaweed, coral) using atlas keys ---
+      this.oceanElements = [
+        this.add.sprite(200, 520, 'natureElements', 'fish').setScale(0.7),
+        this.add.sprite(320, 570, 'natureElements', 'fish').setScale(0.7).setFlipX(true),
+        this.add.sprite(420, 560, 'natureElements', 'seaweed1').setScale(0.7),
+        this.add.sprite(600, 540, 'natureElements', 'seaweed2').setScale(0.7),
+        this.add.sprite(700, 570, 'natureElements', 'coral1').setScale(0.7),
+        this.add.sprite(800, 600, 'natureElements', 'coral2').setScale(0.7),
+        this.add.sprite(900, 550, 'natureElements', 'seaweed3').setScale(0.7)
+      ];
+      // --- Wave Sprites for Tides (hidden by default, shown on action) ---
+      this.waveSend = this.add.sprite(512, 384, 'natureElements', 'wave').setScale(1.1).setVisible(false);
+      this.waveEase = this.add.sprite(512, 384, 'natureElements', 'wave').setScale(1.1).setFlipX(true).setVisible(false);
+    } catch (e) {
+      console.error('Failed to create sprites from natureElements:', e);
+      // Fallback: draw debug rectangles if sprites are missing
+      this.landElements = [
+        this.add.rectangle(140, 270, 64, 64, 0x00ff00),
+        this.add.rectangle(230, 300, 64, 64, 0x00ff00),
+        this.add.rectangle(320, 320, 64, 64, 0x00ff00),
+        this.add.rectangle(400, 340, 64, 64, 0x00ff00),
+        this.add.rectangle(480, 330, 64, 64, 0x00ff00),
+      ];
+      this.oceanElements = [
+        this.add.rectangle(200, 520, 64, 64, 0x0000ff),
+        this.add.rectangle(320, 570, 64, 64, 0x0000ff),
+        this.add.rectangle(420, 560, 64, 64, 0x0000ff),
+        this.add.rectangle(600, 540, 64, 64, 0x0000ff),
+        this.add.rectangle(700, 570, 64, 64, 0x0000ff),
+      ];
+      this.waveSend = this.add.rectangle(512, 384, 128, 32, 0x00ffff).setVisible(false);
+      this.waveEase = this.add.rectangle(512, 384, 128, 32, 0x00ffff).setVisible(false);
+    }
     this.animalPulse = 0; // for pulse animation
 
     // --- SCORE (move after meter, before controls) ---
@@ -418,29 +412,30 @@ export default class Game extends Phaser.Scene {
     const inBalanced = this.tide >= 0.33 && this.tide <= 0.67;
     // Update harmony meter
     this.updateHarmonyMeter(inBalanced);
-    // Animals react
-    for (let a of this.landAnimals) {
+    // Land elements (trees/animals) react
+    for (let a of this.landElements) {
       if (this.tide < 0.33) {
-        a.setFillStyle(0xffcccc, 1);
+        a.setTint(0xffcccc); // danger - too low
         a.setScale(0.8 + 0.04 * Math.sin(this.animalPulse * 3));
       } else if (this.tide > 0.67) {
-        a.setFillStyle(0xffe5b0, 1);
+        a.setTint(0xffe5b0); // danger - too high
         a.setScale(0.85 + 0.03 * Math.sin(this.animalPulse * 4));
       } else {
-        a.setFillStyle(0x7cf7a7, 1);
+        a.clearTint(); // balanced
         a.setScale(1.05 + 0.07 * Math.sin(this.animalPulse)); // pulse
       }
     }
-    for (let o of this.oceanLife) {
-      if (this.tide > 0.67) {
-        o.setFillStyle(0xccddff, 1);
-        o.setScale(0.8 + 0.04 * Math.sin(this.animalPulse * 2));
-      } else if (this.tide < 0.33) {
-        o.setFillStyle(0xe0e0e0, 1);
-        o.setScale(0.85 + 0.03 * Math.sin(this.animalPulse * 3));
+    // Ocean elements (fish/coral) react
+    for (let o of this.oceanElements) {
+      if (this.tide < 0.33) {
+        o.setTint(0x66ccff); // danger - too low
+        o.setScale(0.9 + 0.04 * Math.cos(this.animalPulse * 2));
+      } else if (this.tide > 0.67) {
+        o.setTint(0x2266ff); // danger - too high
+        o.setScale(0.85 + 0.03 * Math.cos(this.animalPulse * 3));
       } else {
-        o.setFillStyle(0x7cf7a7, 1);
-        o.setScale(1.05 + 0.07 * Math.sin(this.animalPulse + 1)); // pulse
+        o.clearTint(); // balanced
+        o.setScale(1.05 + 0.07 * Math.cos(this.animalPulse * 1.5));
       }
     }
     // Game over if meter reaches either end
@@ -524,20 +519,24 @@ export default class Game extends Phaser.Scene {
   }
 
   updateHarmonyMeter(inBalanced) {
-    this.harmonyMeter.clear();
-    // Glow or color change for danger
-    if (!inBalanced) {
-      this.harmonyMeter.lineStyle(8, 0xff4d4d, 0.7);
-      this.harmonyMeter.strokeRoundedRect(40, 40, 48, 160, 16);
-    }
     // Defensive: ensure tide is a number
-    let tide =
-      typeof this.tide === "number" && !isNaN(this.tide) ? this.tide : 0.5;
-    // Indicator
-    let y = 40 + (1 - tide) * 160;
-    let color = inBalanced ? 0xffe066 : 0xff4d4d; // yellow if balanced, red if danger
-    this.harmonyMeter.fillStyle(color, 1);
-    this.harmonyMeter.fillRoundedRect(46, y - 12, 40, 24, 8);
+    let tide = typeof this.tide === "number" && !isNaN(this.tide) ? this.tide : 0.5;
+    // Move indicator sprite along the meter
+    // The meter background's top is at y=120, height ~160px
+    let indicatorY = 120 + (1 - tide) * 160;
+    if (this.harmonyMeterIndicator) {
+      this.harmonyMeterIndicator.y = indicatorY;
+      // Tint the indicator for danger/balance
+      if (inBalanced) {
+        this.harmonyMeterIndicator.setTint(0xffe066);
+        if (this.harmonyMeterBg) this.harmonyMeterBg.setAlpha(1);
+      } else {
+        this.harmonyMeterIndicator.setTint(0xff4d4d);
+        if (this.harmonyMeterBg) this.harmonyMeterBg.setAlpha(0.8);
+      }
+    } else {
+      console.warn('harmonyMeterIndicator is undefined');
+    }
     // Numeric display
     let harmonyPct = Math.round((1 - Math.abs(tide - 0.5) * 2) * 100);
     this.harmonyValueText.setText(harmonyPct + "%");

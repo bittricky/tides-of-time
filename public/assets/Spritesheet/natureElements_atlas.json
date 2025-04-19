@@ -1,0 +1,28 @@
+{
+  "frames": {
+    "cloud": { "frame": {"x":0, "y":0, "w":96, "h":56} },
+    "tree1": { "frame": {"x":110, "y":0, "w":56, "h":64} },
+    "tree2": { "frame": {"x":176, "y":0, "w":56, "h":64} },
+    "bird": { "frame": {"x":242, "y":0, "w":52, "h":44} },
+    "tree3": { "frame": {"x":304, "y":0, "w":56, "h":64} },
+    "low_label": { "frame": {"x":0, "y":70, "w":52, "h":28} },
+    "harmony_meter": { "frame": {"x":54, "y":60, "w":52, "h":128} },
+    "wave": { "frame": {"x":110, "y":70, "w":128, "h":48} },
+    "crab": { "frame": {"x":242, "y":60, "w":52, "h":44} },
+    "tree4": { "frame": {"x":304, "y":70, "w":56, "h":64} },
+    "meter_bg": { "frame": {"x":0, "y":140, "w":220, "h":48} },
+    "fish": { "frame": {"x":0, "y":200, "w":64, "h":40} },
+    "progress_bar1": { "frame": {"x":70, "y":200, "w":128, "h":32} },
+    "progress_bar2": { "frame": {"x":210, "y":200, "w":128, "h":32} },
+    "button": { "frame": {"x":350, "y":200, "w":56, "h":56} },
+    "seaweed1": { "frame": {"x":0, "y":260, "w":44, "h":56} },
+    "seaweed2": { "frame": {"x":54, "y":260, "w":44, "h":56} },
+    "coral1": { "frame": {"x":110, "y":260, "w":44, "h":56} },
+    "coral2": { "frame": {"x":166, "y":260, "w":44, "h":56} },
+    "seaweed3": { "frame": {"x":222, "y":260, "w":44, "h":56} }
+  },
+  "meta": {
+    "image": "natureElements_interface.png",
+    "scale": "1"
+  }
+}
