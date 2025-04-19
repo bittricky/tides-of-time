@@ -7,7 +7,7 @@ A web-based game about balancing the tides and maintaining balance between land 
 
 ## Game Overview
 
-Tides of Time invites players to experience the balance by giving the player the power to influence the tides to create balance. Guide the tide, maintain a balance, and witness the interplay between cause and effect.
+Tides of Time invites players to experience balance by giving the player the power to influence the tides to create said balance. Guide the tide, maintain a balance, and witness the interplay between cause and effect.
 
 ## Features Completed
 
