@@ -1,6 +1,6 @@
 # Tides of Time
 
-A web-based game about balancing the tides and maintaining balance between land and ocean life. Built with Phaser 3 and Webpack.
+A web-based game about balancing the tides and maintaining balance between land and ocean life. Built with Phaser 3 and Webpack for Gamedev.js Game Jam 2025 for the theme, `balance`.
 
 > It's like [Flappy Bird](https://en.wikipedia.org/wiki/Flappy_Bird) but with Water
 
