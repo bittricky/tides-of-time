@@ -2,6 +2,8 @@
 
 A web-based game about balancing the tides and maintaining balance between land and ocean life. Built with Phaser 3 and Webpack.
 
+> It's like Flappy Bird but with Water
+
 
 ## Game Overview
 
