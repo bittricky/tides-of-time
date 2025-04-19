@@ -207,7 +207,7 @@ Either of these will stop `log.js` from running. If you do decide to do this, pl
 
 They love to see what developers like you create with Phaser! It really motivates them to keep improving. So please join their community and show-off your work 😄
 
-**Visit:** The [Phaser website](https://phaser.io) and follow on [Phaser](https://bsky.app/profile/phaser.io)<br />
+**Visit:** The [Phaser website](https://phaser.io) and follow [Phaser](https://bsky.app/profile/phaser.io)<br />
 **Play:** Some of the amazing games [#madewithphaser](https://twitter.com/search?q=%23madewithphaser&src=typed_query&f=live)<br />
 **Learn:** [API Docs](https://newdocs.phaser.io), [Support Forum](https://phaser.discourse.group/) and [StackOverflow](https://stackoverflow.com/questions/tagged/phaser-framework)<br />
 **Discord:** Join them on [Discord](https://discord.gg/phaser)<br />
