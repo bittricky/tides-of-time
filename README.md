@@ -68,7 +68,7 @@ The oscillation of land and sea, the dance of danger and safety, reflect the eve
 
 Drawing from [Zen](https://en.wikipedia.org/wiki/Zen) and [Advaita Vedanta](https://en.wikipedia.org/wiki/Advaita_Vedanta), the game aims to dissolve the boundary between what is the player and what is the system. There is no "winning" against the tide—only the opportunity to participate in its unfolding. The experience can be meditative, welcoming change, accepting impermanence, and finding delight in the subtle interplay of cause and effect.
 
-> Can there be a true distinction between what is the self and what is nature that has been attempted to be conquered?
+> Can there be a true distinction between the self and the nature it seeks to conquer?
 
 ---
 
