@@ -29,7 +29,11 @@ export default class Game extends Phaser.Scene {
     // --- UI: Harmony Meter (atlas-based, create before updateHarmonyMeter) ---
     // Use atlas keys: 'harmony_meter' for indicator, 'meter_bg' for background
     // PIXEL-PERFECT DRAWN BALANCE METER (matches water_meter.png)
-    const meterX = 64, meterY = 120, meterW = 52, meterH = 160, meterR = 12;
+    const meterX = 64,
+      meterY = 120,
+      meterW = 52,
+      meterH = 160,
+      meterR = 12;
     const bandH = meterH / 4;
     // Colors from the PNG (approximate)
     const colorTop = 0xe4efe5;
@@ -38,51 +42,102 @@ export default class Game extends Phaser.Scene {
     const colorBand3 = 0x3e8c99;
     const colorDivider = 0xd0c39d;
     const colorWavy = 0xb5d8db;
-    const labelColor = '#a0915d';
+    const labelColor = "#a0915d";
     // Draw meter background (rounded rect)
     this.harmonyMeterG = this.add.graphics({ x: 0, y: 0 }).setDepth(99);
     this.harmonyMeterG.fillStyle(colorTop, 1);
-    this.harmonyMeterG.fillRoundedRect(meterX - meterW/2, meterY, meterW, meterH, meterR);
+    this.harmonyMeterG.fillRoundedRect(
+      meterX - meterW / 2,
+      meterY,
+      meterW,
+      meterH,
+      meterR
+    );
     // Draw color bands (from top to bottom)
     this.harmonyMeterG.fillStyle(colorBand1, 1);
-    this.harmonyMeterG.fillRect(meterX - meterW/2, meterY + bandH, meterW, bandH);
+    this.harmonyMeterG.fillRect(
+      meterX - meterW / 2,
+      meterY + bandH,
+      meterW,
+      bandH
+    );
     this.harmonyMeterG.fillStyle(colorBand2, 1);
-    this.harmonyMeterG.fillRect(meterX - meterW/2, meterY + 2*bandH, meterW, bandH);
+    this.harmonyMeterG.fillRect(
+      meterX - meterW / 2,
+      meterY + 2 * bandH,
+      meterW,
+      bandH
+    );
     this.harmonyMeterG.fillStyle(colorBand3, 1);
-    this.harmonyMeterG.fillRect(meterX - meterW/2, meterY + 3*bandH, meterW, bandH);
+    this.harmonyMeterG.fillRect(
+      meterX - meterW / 2,
+      meterY + 3 * bandH,
+      meterW,
+      bandH
+    );
     // Draw dividing lines
     this.harmonyMeterG.lineStyle(2, colorDivider, 1);
     for (let i = 1; i < 4; i++) {
-      this.harmonyMeterG.strokeLineShape(new Phaser.Geom.Line(
-        meterX - meterW/2, meterY + i*bandH,
-        meterX + meterW/2, meterY + i*bandH
-      ));
+      this.harmonyMeterG.strokeLineShape(
+        new Phaser.Geom.Line(
+          meterX - meterW / 2,
+          meterY + i * bandH,
+          meterX + meterW / 2,
+          meterY + i * bandH
+        )
+      );
     }
     // Draw wavy water line at the top of band 1
     this.harmonyMeterG.lineStyle(2, colorWavy, 1);
     this.harmonyMeterG.beginPath();
     for (let i = 0; i <= meterW; i += 2) {
-      const wx = meterX - meterW/2 + i;
-      const wy = meterY + bandH + Math.sin(i/10) * 6;
+      const wx = meterX - meterW / 2 + i;
+      const wy = meterY + bandH + Math.sin(i / 10) * 6;
       if (i === 0) this.harmonyMeterG.moveTo(wx, wy);
       else this.harmonyMeterG.lineTo(wx, wy);
     }
     this.harmonyMeterG.strokePath();
     // Draw vertical label bar
     this.harmonyMeterG.lineStyle(5, colorDivider, 1);
-    this.harmonyMeterG.strokeLineShape(new Phaser.Geom.Line(meterX - meterW/2 - 32, meterY, meterX - meterW/2 - 32, meterY + meterH));
+    this.harmonyMeterG.strokeLineShape(
+      new Phaser.Geom.Line(
+        meterX - meterW / 2 - 32,
+        meterY,
+        meterX - meterW / 2 - 32,
+        meterY + meterH
+      )
+    );
     // Draw only the vertical label bar as a visual separator
-    const labelBarX = meterX - meterW/2 - 32;
-    const labelBar = this.add.graphics({x:0, y:0}).setDepth(199);
+    const labelBarX = meterX - meterW / 2 - 32;
+    const labelBar = this.add.graphics({ x: 0, y: 0 }).setDepth(199);
     labelBar.lineStyle(4, colorDivider, 1);
-    labelBar.strokeLineShape(new Phaser.Geom.Line(labelBarX, meterY, labelBarX, meterY + meterH));
+    labelBar.strokeLineShape(
+      new Phaser.Geom.Line(labelBarX, meterY, labelBarX, meterY + meterH)
+    );
     // Add back text labels LOW, BALANCED, HIGH in the meter's color scheme
-    const labelFont = { fontFamily: 'Arial Black', fontSize: 28, color: '#a0915d', fontStyle: 'bold' };
-    this.add.text(labelBarX - 10, meterY + 2, 'LOW', labelFont).setOrigin(1, 0).setDepth(300);
-    this.add.text(labelBarX - 10, meterY + meterH/2, 'BALANCED', labelFont).setOrigin(1, 0.5).setDepth(300);
-    this.add.text(labelBarX - 10, meterY + meterH - 2, 'HIGH', labelFont).setOrigin(1, 1).setDepth(300);
+    const labelFont = {
+      fontFamily: "Arial Black",
+      fontSize: 28,
+      color: "#a0915d",
+      fontStyle: "bold",
+    };
+    this.add
+      .text(labelBarX - 10, meterY + 2, "LOW", labelFont)
+      .setOrigin(1, 0)
+      .setDepth(300);
+    this.add
+      .text(labelBarX - 10, meterY + meterH / 2, "BALANCED", labelFont)
+      .setOrigin(1, 0.5)
+      .setDepth(300);
+    this.add
+      .text(labelBarX - 10, meterY + meterH - 2, "HIGH", labelFont)
+      .setOrigin(1, 1)
+      .setDepth(300);
     // Indicator rectangle sized to fit inside the meter
-    this.harmonyMeterIndicator = this.add.rectangle(meterX, meterY, 48, 16, 0xffe066).setOrigin(0.5, 0).setDepth(100);
+    this.harmonyMeterIndicator = this.add
+      .rectangle(meterX, meterY, 48, 16, 0xffe066)
+      .setOrigin(0.5, 0)
+      .setDepth(100);
     this.harmonyValueText = this.add
       .text(64, 210, "", {
         fontFamily: "Arial Black",
@@ -97,7 +152,7 @@ export default class Game extends Phaser.Scene {
     this.updateHarmonyMeter();
 
     // --- Visual Background ---
-    this.add.image(512, 384, 'beach').setDepth(-10).setDisplaySize(1024, 768);
+    this.add.image(512, 384, "beach").setDepth(-10).setDisplaySize(1024, 768);
 
     // --- Land/Ocean (remove old graphics) ---
     // (Old landG and oceanG code removed for clarity)
@@ -109,29 +164,39 @@ export default class Game extends Phaser.Scene {
     try {
       // --- Land Elements (trees, crab, bird, etc.) using atlas keys ---
       this.landElements = [
-        this.add.sprite(140, 270, 'natureElements', 'tree1').setScale(0.7),
-        this.add.sprite(200, 285, 'natureElements', 'tree2').setScale(0.7),
-        this.add.sprite(260, 295, 'natureElements', 'tree3').setScale(0.7),
-        this.add.sprite(320, 305, 'natureElements', 'tree4').setScale(0.7),
-        this.add.sprite(380, 320, 'natureElements', 'crab').setScale(0.6),
-        this.add.sprite(440, 255, 'natureElements', 'bird').setScale(0.7),
-        this.add.sprite(70, 220, 'natureElements', 'cloud').setScale(0.9)
+        this.add.sprite(140, 270, "natureElements", "tree1").setScale(0.7),
+        this.add.sprite(200, 285, "natureElements", "tree2").setScale(0.7),
+        this.add.sprite(260, 295, "natureElements", "tree3").setScale(0.7),
+        this.add.sprite(320, 305, "natureElements", "tree4").setScale(0.7),
+        this.add.sprite(380, 320, "natureElements", "crab").setScale(0.6),
+        this.add.sprite(440, 255, "natureElements", "bird").setScale(0.7),
+        this.add.sprite(70, 220, "natureElements", "cloud").setScale(0.9),
       ];
       // --- Ocean Elements (fish, seaweed, coral) using atlas keys ---
       this.oceanElements = [
-        this.add.sprite(200, 520, 'natureElements', 'fish').setScale(0.7),
-        this.add.sprite(320, 570, 'natureElements', 'fish').setScale(0.7).setFlipX(true),
-        this.add.sprite(420, 560, 'natureElements', 'seaweed1').setScale(0.7),
-        this.add.sprite(600, 540, 'natureElements', 'seaweed2').setScale(0.7),
-        this.add.sprite(700, 570, 'natureElements', 'coral1').setScale(0.7),
-        this.add.sprite(800, 600, 'natureElements', 'coral2').setScale(0.7),
-        this.add.sprite(900, 550, 'natureElements', 'seaweed3').setScale(0.7)
+        this.add.sprite(200, 520, "natureElements", "fish").setScale(0.7),
+        this.add
+          .sprite(320, 570, "natureElements", "fish")
+          .setScale(0.7)
+          .setFlipX(true),
+        this.add.sprite(420, 560, "natureElements", "seaweed1").setScale(0.7),
+        this.add.sprite(600, 540, "natureElements", "seaweed2").setScale(0.7),
+        this.add.sprite(700, 570, "natureElements", "coral1").setScale(0.7),
+        this.add.sprite(800, 600, "natureElements", "coral2").setScale(0.7),
+        this.add.sprite(900, 550, "natureElements", "seaweed3").setScale(0.7),
       ];
       // --- Wave Sprites for Tides (hidden by default, shown on action) ---
-      this.waveSend = this.add.sprite(512, 384, 'natureElements', 'wave').setScale(1.1).setVisible(false);
-      this.waveEase = this.add.sprite(512, 384, 'natureElements', 'wave').setScale(1.1).setFlipX(true).setVisible(false);
+      this.waveSend = this.add
+        .sprite(512, 384, "natureElements", "wave")
+        .setScale(1.1)
+        .setVisible(false);
+      this.waveEase = this.add
+        .sprite(512, 384, "natureElements", "wave")
+        .setScale(1.1)
+        .setFlipX(true)
+        .setVisible(false);
     } catch (e) {
-      console.error('Failed to create sprites from natureElements:', e);
+      console.error("Failed to create sprites from natureElements:", e);
       // Fallback: draw debug rectangles if sprites are missing
       this.landElements = [
         this.add.rectangle(140, 270, 64, 64, 0x00ff00),
@@ -147,8 +212,12 @@ export default class Game extends Phaser.Scene {
         this.add.rectangle(600, 540, 64, 64, 0x0000ff),
         this.add.rectangle(700, 570, 64, 64, 0x0000ff),
       ];
-      this.waveSend = this.add.rectangle(512, 384, 128, 32, 0x00ffff).setVisible(false);
-      this.waveEase = this.add.rectangle(512, 384, 128, 32, 0x00ffff).setVisible(false);
+      this.waveSend = this.add
+        .rectangle(512, 384, 128, 32, 0x00ffff)
+        .setVisible(false);
+      this.waveEase = this.add
+        .rectangle(512, 384, 128, 32, 0x00ffff)
+        .setVisible(false);
     }
     this.animalPulse = 0; // for pulse animation
 
@@ -332,69 +401,59 @@ export default class Game extends Phaser.Scene {
       this.retryBtnText.setVisible(false);
       this.retryBtnHit.setVisible(false);
     });
-
-    // --- DEBUG OVERLAY ---
-    this.debugText = this.add
-      .text(10, 10, "", {
-        fontFamily: "monospace",
-        fontSize: 16,
-        color: "#ff0",
-        backgroundColor: "rgba(0,0,0,0.6)",
-        padding: { left: 6, right: 6, top: 2, bottom: 2 },
-        align: "left",
-        wordWrap: { width: 340 },
-      })
-      .setDepth(2000);
   }
 
   update() {
     // DEBUG: overlay update
     // Defensive: check for invalid state
-    let warningMsg = '';
+    let warningMsg = "";
     // Strict guards: immediately reset and warn if invalid
-    if (typeof this.tide !== 'number' || isNaN(this.tide)) {
-      warningMsg += 'tide INVALID\n';
-      console.warn('[CRITICAL] tide was invalid, resetting to 0.5');
+    if (typeof this.tide !== "number" || isNaN(this.tide)) {
+      warningMsg += "tide INVALID\n";
+      console.warn("[CRITICAL] tide was invalid, resetting to 0.5");
       this.tide = 0.5;
     }
-    if (typeof this.tideDir !== 'number' || isNaN(this.tideDir)) {
-      warningMsg += 'tideDir INVALID\n';
-      console.warn('[CRITICAL] tideDir was invalid, resetting to 0');
+    if (typeof this.tideDir !== "number" || isNaN(this.tideDir)) {
+      warningMsg += "tideDir INVALID\n";
+      console.warn("[CRITICAL] tideDir was invalid, resetting to 0");
       this.tideDir = 0;
     }
-    if (typeof this.dangerTimer !== 'number' || isNaN(this.dangerTimer)) {
-      warningMsg += 'dangerTimer INVALID\n';
-      console.warn('[CRITICAL] dangerTimer was invalid, resetting to 0');
+    if (typeof this.dangerTimer !== "number" || isNaN(this.dangerTimer)) {
+      warningMsg += "dangerTimer INVALID\n";
+      console.warn("[CRITICAL] dangerTimer was invalid, resetting to 0");
       this.dangerTimer = 0;
     }
-    if (typeof this.score !== 'number' || isNaN(this.score)) {
-      warningMsg += 'score INVALID\n';
-      console.warn('[CRITICAL] score was invalid, resetting to 0');
+    if (typeof this.score !== "number" || isNaN(this.score)) {
+      warningMsg += "score INVALID\n";
+      console.warn("[CRITICAL] score was invalid, resetting to 0");
       this.score = 0;
     }
-    if (typeof this.highScore !== 'number' || isNaN(this.highScore)) {
-      warningMsg += 'highScore INVALID\n';
-      console.warn('[CRITICAL] highScore was invalid, resetting to 0');
+    if (typeof this.highScore !== "number" || isNaN(this.highScore)) {
+      warningMsg += "highScore INVALID\n";
+      console.warn("[CRITICAL] highScore was invalid, resetting to 0");
       this.highScore = 0;
     }
     // Failsafe: if any variable was invalid, log a warning but DO NOT force game over
     if (warningMsg) {
-      console.warn('[WARNING] Invalid state detected, but not forcing game over:', warningMsg);
+      console.warn(
+        "[WARNING] Invalid state detected, but not forcing game over:",
+        warningMsg
+      );
       // Optionally, you can display a warning overlay or highlight, but do not set gameOver here
     }
     if (this.debugText) {
       this.debugText.setText(
         `gameOver: ${this.gameOver}\n` +
-        `tide: ${this.tide}\n` +
-        `tideDir: ${this.tideDir}\n` +
-        `score: ${this.score}\n` +
-        `highScore: ${this.highScore}\n` +
-        `dangerTimer: ${this.dangerTimer}` +
-        (warningMsg ? '\n[WARNING]\n' + warningMsg : '')
+          `tide: ${this.tide}\n` +
+          `tideDir: ${this.tideDir}\n` +
+          `score: ${this.score}\n` +
+          `highScore: ${this.highScore}\n` +
+          `dangerTimer: ${this.dangerTimer}` +
+          (warningMsg ? "\n[WARNING]\n" + warningMsg : "")
       );
     }
     if (warningMsg) {
-      console.warn('[WARNING] Invalid game state detected:', warningMsg);
+      console.warn("[WARNING] Invalid game state detected:", warningMsg);
     }
     // Check for true game over at the very start
     if (this.tide <= 0 || this.tide >= 1) {
@@ -429,8 +488,8 @@ export default class Game extends Phaser.Scene {
         0.016 + Math.random() * 0.014 + 0.00001 * this.difficultyTimer;
     // Compute oscillation
     let osc = Math.sin(this.oscPhase) * this.oscAmp;
-    if (typeof osc !== 'number' || isNaN(osc)) {
-      console.warn('[CRITICAL] osc was invalid, resetting to 0');
+    if (typeof osc !== "number" || isNaN(osc)) {
+      console.warn("[CRITICAL] osc was invalid, resetting to 0");
       osc = 0;
     }
     // Player force
@@ -442,23 +501,25 @@ export default class Game extends Phaser.Scene {
       if (Math.abs(this.playerForce) < 0.002) this.playerForce = 0;
     }
     // Clamp player force
-    if (typeof this.playerForce !== 'number' || isNaN(this.playerForce)) {
-      console.warn('[CRITICAL] playerForce was invalid, resetting to 0');
+    if (typeof this.playerForce !== "number" || isNaN(this.playerForce)) {
+      console.warn("[CRITICAL] playerForce was invalid, resetting to 0");
       this.playerForce = 0;
     }
     this.playerForce = Phaser.Math.Clamp(this.playerForce, -0.4, 0.4);
     // The actual tide is the sum of the oscillation and player force, centered at 0.5
     // Oscillates between nearly 0 and 1
     let computedTide = 0.5 + osc + this.playerForce;
-    if (typeof computedTide !== 'number' || isNaN(computedTide)) {
-      console.warn('[CRITICAL] computedTide was invalid, resetting to 0.5');
+    if (typeof computedTide !== "number" || isNaN(computedTide)) {
+      console.warn("[CRITICAL] computedTide was invalid, resetting to 0.5");
       computedTide = 0.5;
     }
     this.tide = Phaser.Math.Clamp(computedTide, 0, 1);
 
     // --- DETAILED LOGGING ---
     if (!this.gameOver) {
-      console.log(`[FRAME] tide=${this.tide} tideDir=${this.tideDir} dangerTimer=${this.dangerTimer} score=${this.score}`);
+      console.log(
+        `[FRAME] tide=${this.tide} tideDir=${this.tideDir} dangerTimer=${this.dangerTimer} score=${this.score}`
+      );
     }
 
     // Animate animal/coral pulse
@@ -575,33 +636,50 @@ export default class Game extends Phaser.Scene {
 
   updateHarmonyMeter(inBalanced) {
     // Defensive: ensure tide is a number
-    let tide = typeof this.tide === "number" && !isNaN(this.tide) ? this.tide : 0.5;
+    let tide =
+      typeof this.tide === "number" && !isNaN(this.tide) ? this.tide : 0.5;
     // Move indicator sprite along the meter
     // The meter background's top is at y=120, height ~160px
     let indicatorY = 120 + (1 - tide) * 160;
     if (this.harmonyMeterIndicator) {
       this.harmonyMeterIndicator.y = indicatorY;
       // Only tint if the indicator supports setTint (i.e., is a Sprite or Image)
-      if (typeof this.harmonyMeterIndicator.setTint === 'function') {
+      if (typeof this.harmonyMeterIndicator.setTint === "function") {
         if (inBalanced) {
           this.harmonyMeterIndicator.setTint(0xffe066);
-          if (this.harmonyMeterBg && typeof this.harmonyMeterBg.setAlpha === 'function') this.harmonyMeterBg.setAlpha(1);
+          if (
+            this.harmonyMeterBg &&
+            typeof this.harmonyMeterBg.setAlpha === "function"
+          )
+            this.harmonyMeterBg.setAlpha(1);
         } else {
           this.harmonyMeterIndicator.setTint(0xff4d4d);
-          if (this.harmonyMeterBg && typeof this.harmonyMeterBg.setAlpha === 'function') this.harmonyMeterBg.setAlpha(0.8);
+          if (
+            this.harmonyMeterBg &&
+            typeof this.harmonyMeterBg.setAlpha === "function"
+          )
+            this.harmonyMeterBg.setAlpha(0.8);
         }
       } else {
         // Rectangle: change fillColor instead
         if (inBalanced) {
           this.harmonyMeterIndicator.fillColor = 0xffe066;
-          if (this.harmonyMeterBg && typeof this.harmonyMeterBg.setAlpha === 'function') this.harmonyMeterBg.setAlpha(1);
+          if (
+            this.harmonyMeterBg &&
+            typeof this.harmonyMeterBg.setAlpha === "function"
+          )
+            this.harmonyMeterBg.setAlpha(1);
         } else {
           this.harmonyMeterIndicator.fillColor = 0xff4d4d;
-          if (this.harmonyMeterBg && typeof this.harmonyMeterBg.setAlpha === 'function') this.harmonyMeterBg.setAlpha(0.8);
+          if (
+            this.harmonyMeterBg &&
+            typeof this.harmonyMeterBg.setAlpha === "function"
+          )
+            this.harmonyMeterBg.setAlpha(0.8);
         }
       }
     } else {
-      console.warn('harmonyMeterIndicator is undefined');
+      console.warn("harmonyMeterIndicator is undefined");
     }
     // Numeric display
     let harmonyPct = Math.round((1 - Math.abs(tide - 0.5) * 2) * 100);
