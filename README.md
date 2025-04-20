@@ -66,7 +66,7 @@ The oscillation of land and sea, the dance of danger and safety, reflect the eve
 
 **Non-Dual Awareness:** 
 
-Drawing from [Zen](https://en.wikipedia.org/wiki/Zen) and [Advaita Vedanta](https://en.wikipedia.org/wiki/Advaita_Vedanta), the game aims to dissolve the boundary between what is the player and what is the system. **There is no "winning" against the tide**, only the opportunity to participate in its unfolding. The experience that aims to invoked in the player is meditative, the feeling of welcoming change, feeling accepting impermanence, and delight in the interplay of cause and effect.
+Drawing from [Zen](https://en.wikipedia.org/wiki/Zen) and [Advaita Vedanta](https://en.wikipedia.org/wiki/Advaita_Vedanta), the game aims to dissolve the boundary between what is the player and what is the system. **There is no "winning" against the tide**, only the opportunity to participate in its unfolding. The experience that it aims to invoke in the player is a meditative state, the feeling of welcoming change, the feeling of accepting impermanence, and delight in the interplay of cause and effect.
 
 > Can there be a true distinction between the self and the nature it seeks to conquer?
 
