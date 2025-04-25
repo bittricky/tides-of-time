@@ -215,3 +215,7 @@ They love to see what developers like you create with Phaser! It really motivate
 **Read:** The [Phaser World](https://phaser.io/community/newsletter) Newsletter<br />
 
 Created with [Phaser Studio](mailto:support@phaser.io).
+
+----------------
+
+### **"Thou Art That"**
